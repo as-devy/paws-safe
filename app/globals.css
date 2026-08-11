@@ -1,26 +1,149 @@
 @import "tailwindcss";
+@import "./home.css";
+@import "./pets-listing.css";
+@import "./forms.css";
+@import "./auth.css";
+@import "./post-pet.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #02c5bd;
+  --primary-dark: #00a39c;
+  --primary-soft: #d8f7f5;
+  --navy: #003049;
+  --navy-soft: #0a4a63;
+  --cream: #f7f4e8;
+  --cream-deep: #efe9d4;
+  --ink: #1a2332;
+  --muted: #5c6775;
+  --danger: #d62828;
+  --surface: #ffffff;
+  --footer: #1d1f2b;
+  --heading: #003049;
+  --card: #ffffff;
+  --card-border: rgba(0, 48, 73, 0.08);
+  --donation: #fae8d7;
+  --input-bg: #ffffff;
+  --header-bg: rgba(255, 255, 255, 0.92);
+  --shadow: rgba(0, 48, 73, 0.08);
+}
+
+html.dark {
+  --primary: #2dd4cb;
+  --primary-dark: #14b8b0;
+  --primary-soft: #134e4a;
+  --navy: #003049;
+  --navy-soft: #0f3a4d;
+  --cream: #10151c;
+  --cream-deep: #161d27;
+  --ink: #e8edf2;
+  --muted: #9aa7b5;
+  --danger: #f07178;
+  --surface: #1a222d;
+  --footer: #0a0d12;
+  --heading: #f1f5f8;
+  --card: #1a222d;
+  --card-border: rgba(255, 255, 255, 0.08);
+  --donation: #243040;
+  --input-bg: #121820;
+  --header-bg: rgba(16, 21, 28, 0.92);
+  --shadow: rgba(0, 0, 0, 0.35);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-soft: var(--primary-soft);
+  --color-navy: var(--navy);
+  --color-navy-soft: var(--navy-soft);
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-danger: var(--danger);
+  --color-surface: var(--surface);
+  --color-footer: var(--footer);
+  --color-heading: var(--heading);
+  --color-card: var(--card);
+  --color-donation: var(--donation);
+  --font-sans: var(--font-nunito);
+  --font-display: var(--font-outfit);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-nunito), system-ui, sans-serif;
+  overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+html.dark body {
+  background-color: var(--cream);
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-outfit), system-ui, sans-serif;
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.site-header {
+  background: var(--header-bg);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 28px var(--shadow);
+}
+
+.theme-toggle {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--card-border);
+}
+
+/* Footer */
+
+.site-footer {
+  background:
+    radial-gradient(ellipse 70% 80% at 0% 0%, rgba(2, 197, 189, 0.18), transparent 55%),
+    radial-gradient(ellipse 50% 60% at 100% 100%, rgba(2, 197, 189, 0.1), transparent 50%),
+    var(--footer);
+  color: #fff;
+}
+
+.site-footer__link {
+  color: #a1a1aa;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.site-footer__link:hover {
+  color: #fff;
+  transform: translateX(3px);
+}
+
+.site-footer__social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: #e4e4e7;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.site-footer__social:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
 }
