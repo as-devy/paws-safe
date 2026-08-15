@@ -484,33 +484,6 @@ Not implemented: listing pagination, Redis, ISR/`unstable_cache` for listings, C
 
 ---
 
-## Local setup
-
-```bash
-cd paws-safe
-npm install
-```
-
-Configure environment (do not commit secrets):
-
-- `DATABASE_URL` (and `DIRECT_URL` if using a pooled URL for Prisma vs LISTEN)
-- Auth.js secret and Google credentials if using OAuth
-- `NEXT_PUBLIC_SUPABASE_URL` / anon (or publishable) key and `NEXT_PUBLIC_SITE_URL` for verification emails
-- Apply `supabase/migrations/` on the database, then `npx prisma generate`
-
-```bash
-npm run dev
-```
-
-App: [http://localhost:3000](http://localhost:3000).
-
-```bash
-npm run build && npm start   # production server
-npm run seed                 # optional demo rows
-```
-
----
-
 ## Project Architecture Summary
 
 Paws Safe is a **monolithic Next.js 16** application: React Server Components for reads, server actions for writes, Auth.js JWT sessions, and Prisma 7 on PostgreSQL. Privacy is enforced by hiding contact fields until a request is approved. Chat is a pairwise message table plus notification rows. Admins are a DB enum checked on the server, not in edge middleware. Email verification is delegated to Supabase Auth; application identity lives in `public.users`. Automated tests are not present.
