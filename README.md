@@ -2,7 +2,7 @@
 
 **Connecting pets with loving homes.**
 
-A peer-to-peer web application for listing pets for **adoption** or temporary **foster** care, requesting a pet, and sharing contact details only after the owner approves.
+A peer-to-peer web application for listing pets for **adoption** or temporary **foster** care, requesting a pet, and chat owners.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black) ![React](https://img.shields.io/badge/React-19-61DAFB) ![Prisma](https://img.shields.io/badge/Prisma-7-2D3748) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-3ECF8E) ![Auth.js](https://img.shields.io/badge/Auth.js-5-black)
 
