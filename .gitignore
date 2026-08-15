@@ -41,3 +41,17 @@ yarn-error.log*
 next-env.d.ts
 
 /lib/generated/prisma
+
+# local AI agent / IDE skill caches
+.agents/
+.claude/
+.windsurf/
+.cursor/
+.codex/
+.continue/
+.gemini/
+.aider*
+AGENTS.md
+CLAUDE.md
+.cursorrules
+

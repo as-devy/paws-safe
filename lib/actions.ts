@@ -99,12 +99,12 @@ const CreateUserSchema = z.object({
 
 export type State = {
     errors?: {
-        name?: string[];
-        email?: string[];
-        password?: string[];
-        phone?: string[];
-        country?: string[];
-        city?: string[];
+      name?: string[];
+      email?: string[];
+      password?: string[];
+      phone?: string[];
+      country?: string[];
+      city?: string[];
     };
     message?: string | null;
     values?: {
@@ -181,11 +181,11 @@ export async function signUp(
 
         const hashed = await bcrypt.hash(password, 10);
 
-        await prisma.users.create({
-            data: {
+    await prisma.users.create({
+        data: {
                 username: name,
                 email: normalizedEmail,
-                password: hashed,
+            password: hashed,
                 phone,
                 country,
                 city,
