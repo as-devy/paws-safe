@@ -1,7 +1,12 @@
 "use client";
 
 import Link from "next/link";
+<<<<<<< HEAD
 import { startTransition, useActionState, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+=======
+import { FormEvent, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 import {
   AlertTriangle,
   ArrowLeft,
@@ -9,12 +14,17 @@ import {
   Check,
   HeartHandshake,
   ImagePlus,
+<<<<<<< HEAD
+=======
+  LoaderCircle,
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   MapPin,
   PawPrint,
   Siren,
   Stethoscope,
 } from "lucide-react";
 import { COUNTRIES } from "@/lib/countries";
+<<<<<<< HEAD
 import { postPet, updatePet, type CreatePetState } from "@/lib/actions";
 import { CATEGORY_FILTERS, normalizeCategory, type Pet } from "@/lib/pets";
 import CategoryIcon from "@/components/pets/CategoryIcon";
@@ -23,6 +33,15 @@ type Step = 0 | 1 | 2;
 
 type FormState = {
   listingType: "" | "adoption" | "foster";
+=======
+import { getCookie } from "@/lib/auth";
+
+type Status = "idle" | "uploading" | "saving" | "success" | "error";
+type Step = 0 | 1 | 2;
+
+type FormState = {
+  listingType: "" | "rehome" | "foster";
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   name: string;
   age: string;
   gender: "" | "male" | "female";
@@ -44,6 +63,7 @@ const STEPS = [
   { id: 2, label: "Care & story", icon: Stethoscope },
 ] as const;
 
+<<<<<<< HEAD
 const CATEGORIES = CATEGORY_FILTERS.filter((item) => item.key !== "all").map(
   (item) => ({
     key: item.key as
@@ -57,6 +77,16 @@ const CATEGORIES = CATEGORY_FILTERS.filter((item) => item.key !== "all").map(
     color: item.color,
   }),
 );
+=======
+const CATEGORIES = [
+  { key: "dog", label: "Dog", src: "/imgs/dog.png" },
+  { key: "cat", label: "Cat", src: "/imgs/cat.png" },
+  { key: "rabbit", label: "Rabbit", src: "/imgs/rabbit.png" },
+  { key: "bird", label: "Bird", src: "/imgs/bird.png" },
+  { key: "fish", label: "Fish", src: "/imgs/fish.png" },
+  { key: "other", label: "Other", src: "/imgs/paw-outline.svg" },
+] as const;
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
 const initialForm: FormState = {
   listingType: "",
@@ -75,6 +105,7 @@ const initialForm: FormState = {
   description: "",
 };
 
+<<<<<<< HEAD
 const STEP_ERROR_KEYS: Record<Step, Array<keyof NonNullable<CreatePetState["errors"]>>> = {
   0: ["img", "listingType", "name", "age", "gender", "category"],
   1: ["country", "streetAddress", "city", "postCode"],
@@ -140,6 +171,8 @@ function isStepComplete(
   return isFilled(form.description);
 }
 
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 function shortenFileName(filename: string) {
   const lastDotIndex = filename.lastIndexOf(".");
   if (lastDotIndex === -1) {
@@ -152,6 +185,7 @@ function shortenFileName(filename: string) {
     : filename;
 }
 
+<<<<<<< HEAD
 const CATEGORY_KEYS = [
   "dog",
   "cat",
@@ -223,6 +257,22 @@ export default function PostPetForm({
     const nextStep = firstErrorStep(errors);
     if (nextStep != null) setStep(nextStep);
   }, [errors]);
+=======
+export default function PostPetForm() {
+  const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [step, setStep] = useState<Step>(0);
+  const [form, setForm] = useState<FormState>(initialForm);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [fileLabel, setFileLabel] = useState("Add a clear photo");
+  const [base64Image, setBase64Image] = useState<string | null>(null);
+  const [emergency, setEmergency] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [error, setError] = useState("");
+
+  const progress = useMemo(() => ((step + 1) / STEPS.length) * 100, [step]);
+  const busy = status === "uploading" || status === "saving";
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -236,17 +286,57 @@ export default function PostPetForm({
     setFileLabel(shortenFileName(file.name));
     const reader = new FileReader();
     reader.onload = () => {
+<<<<<<< HEAD
       setPreview(String(reader.result ?? ""));
+=======
+      const result = String(reader.result ?? "");
+      setPreview(result);
+      setBase64Image(result.split(",")[1] ?? null);
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     };
     reader.readAsDataURL(file);
   }
 
+<<<<<<< HEAD
   function goNext() {
     if (!isStepComplete(step, form, preview)) return;
+=======
+  function validateStep(current: Step) {
+    if (current === 0) {
+      if (!base64Image) return "Please add a photo of your pet.";
+      if (!form.listingType) return "Choose adoption or foster.";
+      if (!form.name.trim()) return "Please enter your pet’s name.";
+      if (!form.age.trim()) return "Please enter your pet’s age.";
+      if (!form.gender) return "Please select a gender.";
+      if (!form.category) return "Please choose a category.";
+    }
+    if (current === 1) {
+      if (!form.country) return "Please select a country.";
+      if (!form.streetAddress.trim()) return "Please enter a street address.";
+      if (!form.city.trim()) return "Please enter a city.";
+      if (!form.postCode.trim()) return "Please enter a post code.";
+    }
+    if (current === 2) {
+      if (!form.description.trim()) {
+        return "Please add a short description for adopters.";
+      }
+    }
+    return "";
+  }
+
+  function goNext() {
+    const message = validateStep(step);
+    if (message) {
+      setError(message);
+      return;
+    }
+    setError("");
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     setStep((s) => Math.min(2, s + 1) as Step);
   }
 
   function goBack() {
+<<<<<<< HEAD
     setStep((s) => Math.max(0, s - 1) as Step);
   }
 
@@ -260,6 +350,90 @@ export default function PostPetForm({
         returnTo,
       });
     });
+=======
+    setError("");
+    setStep((s) => Math.max(0, s - 1) as Step);
+  }
+
+  async function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (step !== 2) {
+      goNext();
+      return;
+    }
+
+    const message = validateStep(2);
+    if (message) {
+      setError(message);
+      return;
+    }
+
+    const userId = getCookie("UserId");
+    if (!userId) {
+      setError("Please log in before posting a pet.");
+      return;
+    }
+    if (!base64Image || !form.listingType) return;
+
+    const rehoming = form.listingType === "rehome" ? 1 : 0;
+    const foster = form.listingType === "foster" ? 1 : 0;
+
+    try {
+      setStatus("uploading");
+      setError("");
+
+      const uploadBody = new FormData();
+      uploadBody.append("key", "2750377068f6e1a5530b8e8e9a5d522b");
+      uploadBody.append("image", base64Image);
+
+      const uploadRes = await fetch("https://api.imgbb.com/1/upload", {
+        method: "POST",
+        body: uploadBody,
+      });
+      const uploadJson = await uploadRes.json();
+      if (!uploadJson?.success) throw new Error("Image upload failed");
+
+      setStatus("saving");
+      const petPayload = {
+        ownerId: userId,
+        img: uploadJson.data.url as string,
+        rehoming,
+        foster,
+        emergency: emergency ? 1 : 0,
+        name: form.name.trim(),
+        age: form.age.trim(),
+        category: form.category,
+        gender: form.gender,
+        country: form.country,
+        streetAddress: form.streetAddress.trim(),
+        city: form.city.trim(),
+        postCode: form.postCode.trim(),
+        vaccines_prevention: form.vaccines.trim(),
+        health_history: form.health.trim(),
+        diet: form.diet.trim(),
+        behavior: form.behavior.trim(),
+        description: form.description.trim(),
+        requests: [],
+      };
+
+      const saveRes = await fetch("https://pawssafe.ddns.net/addPet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(petPayload),
+      });
+      const saveJson = await saveRes.json();
+      if (!saveJson?.petId) throw new Error("Could not save pet");
+
+      setStatus("success");
+      window.setTimeout(() => {
+        router.push(rehoming ? "/adoption" : "/foster");
+      }, 900);
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+      setError("Something went wrong while posting. Please try again.");
+    }
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   }
 
   return (
@@ -268,6 +442,7 @@ export default function PostPetForm({
       <div className="post-stage__pattern" aria-hidden />
 
       <div className="post-stage__frame">
+<<<<<<< HEAD
         <header className={`post-stage__intro${isEdit ? " post-stage__intro--wide" : ""}`}>
           <p className="post-stage__kicker">
             {isEdit ? "Keep their story current" : "Find them a home"}
@@ -296,6 +471,21 @@ export default function PostPetForm({
         </header>
 
         <form className="post-wizard">
+=======
+        <header className="post-stage__intro">
+          <p className="post-stage__kicker">Find them a home</p>
+          <h1>Post your pet in a few easy steps</h1>
+          <p>
+            Share a photo, basics, and care notes so the right family can
+            respond with confidence.
+          </p>
+          <p className="post-stage__crumb">
+            <Link href="/">Home</Link> <span aria-hidden>&gt;</span> Post Pet
+          </p>
+        </header>
+
+        <form className="post-wizard" onSubmit={onSubmit}>
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
           <div className="post-wizard__progress" aria-hidden>
             <span style={{ width: `${progress}%` }} />
           </div>
@@ -341,6 +531,7 @@ export default function PostPetForm({
                   onClick={() => fileInputRef.current?.click()}
                 >
                   {preview ? (
+<<<<<<< HEAD
                     <>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={preview} alt="Pet preview" />
@@ -349,6 +540,10 @@ export default function PostPetForm({
                         Change photo
                       </span>
                     </>
+=======
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={preview} alt="Pet preview" />
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
                   ) : (
                     <>
                       <ImagePlus className="h-8 w-8" />
@@ -358,14 +553,22 @@ export default function PostPetForm({
                   )}
                 </button>
                 <p className="post-dropzone__meta">{fileLabel}</p>
+<<<<<<< HEAD
                 <FieldErrors messages={errors?.img} />
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
                 <p className="post-label">I am posting for</p>
                 <div className="post-type-grid">
                   <button
                     type="button"
+<<<<<<< HEAD
                     className={`post-type${form.listingType === "adoption" ? " is-active" : ""}`}
                     onClick={() => update("listingType", "adoption")}
+=======
+                    className={`post-type${form.listingType === "rehome" ? " is-active" : ""}`}
+                    onClick={() => update("listingType", "rehome")}
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
                   >
                     <HeartHandshake className="h-5 w-5" />
                     <strong>Adoption</strong>
@@ -381,7 +584,10 @@ export default function PostPetForm({
                     <span>Needs temporary care</span>
                   </button>
                 </div>
+<<<<<<< HEAD
                 <FieldErrors messages={errors?.listingType} />
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
                 <div className="post-grid-2">
                   <div>
@@ -395,7 +601,10 @@ export default function PostPetForm({
                       onChange={(e) => update("name", e.target.value)}
                       placeholder="e.g. Luna"
                     />
+<<<<<<< HEAD
                     <FieldErrors messages={errors?.name} />
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
                   </div>
                   <div>
                     <label className="post-label" htmlFor="petAge">
@@ -411,7 +620,10 @@ export default function PostPetForm({
                       onChange={(e) => update("age", e.target.value)}
                       placeholder="e.g. 2"
                     />
+<<<<<<< HEAD
                     <FieldErrors messages={errors?.age} />
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
                   </div>
                 </div>
 
@@ -428,7 +640,10 @@ export default function PostPetForm({
                     </button>
                   ))}
                 </div>
+<<<<<<< HEAD
                 <FieldErrors messages={errors?.gender} />
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
                 <p className="post-label">Category</p>
                 <div className="post-category-grid">
@@ -437,6 +652,7 @@ export default function PostPetForm({
                       key={cat.key}
                       type="button"
                       className={`post-category${form.category === cat.key ? " is-active" : ""}`}
+<<<<<<< HEAD
                       style={{ "--cat-accent": cat.color } as CSSProperties}
                       onClick={() => update("category", cat.key)}
                     >
@@ -444,11 +660,20 @@ export default function PostPetForm({
                         category={cat.key}
                         className="h-8 w-8"
                       />
+=======
+                      onClick={() => update("category", cat.key)}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={cat.src} alt="" />
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
                       <span>{cat.label}</span>
                     </button>
                   ))}
                 </div>
+<<<<<<< HEAD
                 <FieldErrors messages={errors?.category} />
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
               </div>
             )}
 
@@ -474,7 +699,10 @@ export default function PostPetForm({
                     </option>
                   ))}
                 </select>
+<<<<<<< HEAD
                 <FieldErrors messages={errors?.country} />
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
                 <label className="post-label" htmlFor="streetAddress">
                   Street address
@@ -486,7 +714,10 @@ export default function PostPetForm({
                   onChange={(e) => update("streetAddress", e.target.value)}
                   placeholder="Street and number"
                 />
+<<<<<<< HEAD
                 <FieldErrors messages={errors?.streetAddress} />
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
                 <div className="post-grid-2">
                   <div>
@@ -500,7 +731,10 @@ export default function PostPetForm({
                       onChange={(e) => update("city", e.target.value)}
                       placeholder="City"
                     />
+<<<<<<< HEAD
                     <FieldErrors messages={errors?.city} />
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
                   </div>
                   <div>
                     <label className="post-label" htmlFor="postCode">
@@ -513,7 +747,10 @@ export default function PostPetForm({
                       onChange={(e) => update("postCode", e.target.value)}
                       placeholder="Post code"
                     />
+<<<<<<< HEAD
                     <FieldErrors messages={errors?.postCode} />
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
                   </div>
                 </div>
               </div>
@@ -523,7 +760,11 @@ export default function PostPetForm({
               <div className="post-step">
                 <div className="post-step__head">
                   <h2>Care notes & story</h2>
+<<<<<<< HEAD
                   <p>Optional medical details and a short story about this pet.</p>
+=======
+                  <p>Optional medical details help, description is required.</p>
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
                 </div>
 
                 <div className="post-stack">
@@ -568,7 +809,10 @@ export default function PostPetForm({
                   value={form.description}
                   onChange={(e) => update("description", e.target.value)}
                 />
+<<<<<<< HEAD
                 <FieldErrors messages={errors?.description} />
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
                 <label
                   className={`post-emergency${emergency ? " is-on" : ""}`}
@@ -587,10 +831,34 @@ export default function PostPetForm({
             )}
           </div>
 
+<<<<<<< HEAD
           {message && (
             <p className="post-alert post-alert--error" role="alert">
               <AlertTriangle className="h-4 w-4 shrink-0" />
               <span>{message}</span>
+=======
+          {error && (
+            <p className="post-alert post-alert--error">
+              <AlertTriangle className="h-4 w-4 shrink-0" />
+              <span>
+                {error}
+                {error.includes("log in") && (
+                  <>
+                    {" "}
+                    <Link href="/login" className="underline font-bold">
+                      Go to login
+                    </Link>
+                  </>
+                )}
+              </span>
+            </p>
+          )}
+
+          {status === "success" && (
+            <p className="post-alert post-alert--ok">
+              <Check className="h-4 w-4" />
+              Pet posted successfully. Redirecting…
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
             </p>
           )}
 
@@ -599,23 +867,32 @@ export default function PostPetForm({
               type="button"
               className="post-btn post-btn--ghost"
               onClick={goBack}
+<<<<<<< HEAD
               disabled={step === 0 || pending}
+=======
+              disabled={step === 0 || busy}
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
             >
               <ArrowLeft className="h-4 w-4" />
               Back
             </button>
 
             {step < 2 ? (
+<<<<<<< HEAD
               <button
                 type="button"
                 className="post-btn"
                 onClick={goNext}
                 disabled={!canContinue}
               >
+=======
+              <button type="button" className="post-btn" onClick={goNext}>
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
                 Continue
                 <ArrowRight className="h-4 w-4" />
               </button>
             ) : (
+<<<<<<< HEAD
               <button
                 type="button"
                 className="post-btn"
@@ -630,6 +907,20 @@ export default function PostPetForm({
                     ? "Save changes"
                     : "Post pet"}
                 <Check className="h-4 w-4" />
+=======
+              <button type="submit" className="post-btn" disabled={busy}>
+                {busy ? (
+                  <>
+                    <LoaderCircle className="h-4 w-4 animate-spin" />
+                    {status === "uploading" ? "Uploading…" : "Publishing…"}
+                  </>
+                ) : (
+                  <>
+                    Post pet
+                    <Check className="h-4 w-4" />
+                  </>
+                )}
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
               </button>
             )}
           </div>

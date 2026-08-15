@@ -64,10 +64,13 @@
   text-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
+<<<<<<< HEAD
 .post-stage__intro--wide h1 {
   max-width: 22ch;
 }
 
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 .post-stage__intro > p {
   margin: 0.75rem auto 0;
   max-width: 36rem;
@@ -276,7 +279,11 @@ textarea.post-input {
   font-size: 0.95rem;
 }
 
+<<<<<<< HEAD
 .post-dropzone:not(.has-image) span {
+=======
+.post-dropzone span {
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   font-size: 0.8rem;
 }
 
@@ -286,6 +293,7 @@ textarea.post-input {
 }
 
 .post-dropzone.has-image {
+<<<<<<< HEAD
   position: relative;
   width: min(100%, 22rem);
   margin-inline: auto;
@@ -298,10 +306,16 @@ textarea.post-input {
 
 .post-dropzone.has-image:hover {
   transform: none;
+=======
+  border-style: solid;
+  padding: 0;
+  min-height: 200px;
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 }
 
 .post-dropzone img {
   width: 100%;
+<<<<<<< HEAD
   height: 100%;
   object-fit: contain;
   display: block;
@@ -325,6 +339,10 @@ textarea.post-input {
 .post-dropzone.has-image:hover .post-dropzone__overlay,
 .post-dropzone.has-image:focus-visible .post-dropzone__overlay {
   opacity: 1;
+=======
+  height: 220px;
+  object-fit: cover;
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 }
 
 .post-dropzone__meta {
@@ -432,10 +450,17 @@ textarea.post-input {
   font-weight: 700;
 }
 
+<<<<<<< HEAD
 .post-category svg {
   width: 1.85rem;
   height: 1.85rem;
   color: var(--cat-accent, var(--primary));
+=======
+.post-category img {
+  width: auto;
+  height: 2rem;
+  object-fit: contain;
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 }
 
 .post-category.is-active {
@@ -499,6 +524,7 @@ textarea.post-input {
   color: var(--danger);
 }
 
+<<<<<<< HEAD
 .post-field-error {
   margin: 0.4rem 0 0;
   font-size: 0.8rem;
@@ -506,6 +532,8 @@ textarea.post-input {
   color: var(--danger);
 }
 
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 .post-alert--ok {
   background: color-mix(in srgb, var(--primary) 14%, var(--surface));
   color: var(--heading);
@@ -571,4 +599,11 @@ textarea.post-input {
     min-width: 0;
     flex: 1;
   }
+<<<<<<< HEAD
+=======
+
+  .post-dropzone img {
+    height: 180px;
+  }
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 }

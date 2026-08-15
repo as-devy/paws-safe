@@ -4,8 +4,11 @@
 @import "./forms.css";
 @import "./auth.css";
 @import "./post-pet.css";
+<<<<<<< HEAD
 @import "./header.css";
 @import "./profile.css";
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -96,11 +99,15 @@ img,
 video,
 svg {
   max-width: 100%;
+<<<<<<< HEAD
   width: auto;
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   height: auto;
 }
 
 .site-header {
+<<<<<<< HEAD
   position: fixed;
   inset: 0 0 auto;
   z-index: 50;
@@ -224,6 +231,17 @@ svg {
 
 .theme-toggle {
   color: var(--heading);
+=======
+  background: var(--header-bg);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 28px var(--shadow);
+}
+
+.theme-toggle {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--card-border);
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 }
 
 /* Footer */

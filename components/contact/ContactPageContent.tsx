@@ -3,17 +3,27 @@
 import Image from "next/image";
 import { FormEvent, useState } from "react";
 import {
+<<<<<<< HEAD
+=======
+  Check,
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   Clock3,
   LoaderCircle,
   Mail,
   MapPin,
   MessageCircle,
   Phone,
+<<<<<<< HEAD
   Send,
   Tag,
   UserRound,
 } from "lucide-react";
 import SiteToast from "@/components/ui/SiteToast";
+=======
+} from "lucide-react";
+
+type Status = "idle" | "sending" | "sent" | "error";
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
 const channels = [
   {
@@ -39,12 +49,17 @@ const channels = [
 ];
 
 export default function ContactPageContent() {
+<<<<<<< HEAD
   const [sending, setSending] = useState(false);
   const [toast, setToast] = useState(false);
+=======
+  const [status, setStatus] = useState<Status>("idle");
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
+<<<<<<< HEAD
     setSending(true);
 
     window.setTimeout(() => {
@@ -53,6 +68,15 @@ export default function ContactPageContent() {
       setToast(false);
       window.requestAnimationFrame(() => setToast(true));
     }, 600);
+=======
+    setStatus("sending");
+
+    window.setTimeout(() => {
+      setStatus("sent");
+      form.reset();
+      window.setTimeout(() => setStatus("idle"), 4000);
+    }, 800);
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   }
 
   return (
@@ -90,6 +114,7 @@ export default function ContactPageContent() {
         />
       </aside>
 
+<<<<<<< HEAD
       <form className="home-contact__panel" onSubmit={onSubmit}>
         <div className="home-contact__head">
           <span className="home-contact__icon">
@@ -172,11 +197,76 @@ export default function ContactPageContent() {
           className="home-contact__submit"
         >
           {sending ? (
+=======
+      <form className="form-card contact-form" onSubmit={onSubmit}>
+        <div className="form-card__head">
+          <span className="form-card__icon">
+            <MessageCircle className="h-5 w-5" />
+          </span>
+          <div>
+            <h2>Send us a message</h2>
+            <p>We usually reply within one business day.</p>
+          </div>
+        </div>
+
+        <label className="form-label" htmlFor="contact_name">
+          Name
+        </label>
+        <input
+          id="contact_name"
+          name="name"
+          type="text"
+          className="form-control"
+          required
+        />
+
+        <label className="form-label" htmlFor="contact_email">
+          Email address
+        </label>
+        <input
+          id="contact_email"
+          name="email"
+          type="email"
+          className="form-control"
+          required
+        />
+
+        <label className="form-label" htmlFor="contact_topic">
+          Topic
+        </label>
+        <select id="contact_topic" name="topic" className="form-control" defaultValue="general">
+          <option value="general">General question</option>
+          <option value="adoption">Adoption help</option>
+          <option value="foster">Foster help</option>
+          <option value="posting">Posting a pet</option>
+          <option value="donation">Donation</option>
+        </select>
+
+        <label className="form-label" htmlFor="contact_message">
+          Message
+        </label>
+        <textarea
+          id="contact_message"
+          name="message"
+          rows={5}
+          className="form-control"
+          required
+          placeholder="How can we help?"
+        />
+
+        <button
+          type="submit"
+          className="form-submit form-submit--danger"
+          disabled={status === "sending"}
+        >
+          {status === "sending" ? (
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
             <>
               <LoaderCircle className="h-4 w-4 animate-spin" />
               Sending…
             </>
           ) : (
+<<<<<<< HEAD
             <>
               <Send className="h-4 w-4" />
               Send message
@@ -191,6 +281,19 @@ export default function ContactPageContent() {
           onClose={() => setToast(false)}
         />
       ) : null}
+=======
+            "Send message"
+          )}
+        </button>
+
+        {status === "sent" && (
+          <p className="form-alert form-alert--ok">
+            <Check className="h-4 w-4" />
+            Message sent successfully
+          </p>
+        )}
+      </form>
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     </div>
   );
 }

@@ -427,7 +427,11 @@ textarea.form-control {
   box-shadow: 0 14px 36px var(--shadow);
 }
 
+<<<<<<< HEAD
 .contact-layout .home-contact__panel {
+=======
+.contact-form .form-submit {
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   width: 100%;
   max-width: none;
 }
@@ -442,6 +446,7 @@ textarea.form-control {
     padding-top: 1.75rem;
   }
 }
+<<<<<<< HEAD
 
 .terms-copy {
   display: flex;
@@ -527,3 +532,5 @@ textarea.form-control {
   color: var(--heading);
   background: color-mix(in oklab, var(--heading) 12%, transparent);
 }
+=======
+>>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
