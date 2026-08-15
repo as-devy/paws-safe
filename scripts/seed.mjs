@@ -42,9 +42,19 @@ const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!url || !serviceKey) {
-  console.error(
-    "Missing SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL) and SUPABASE_SERVICE_ROLE_KEY in .env",
-  );
+  console.error(`
+Missing env for seeding.
+
+You already have the Connect keys (URL + publishable). Seeding also needs the
+service role key (bypasses RLS):
+
+  1. Supabase Dashboard → Project Settings → API Keys
+  2. Copy "service_role" (secret) — NOT the publishable/anon key
+  3. Put it in .env as:
+       SUPABASE_SERVICE_ROLE_KEY=eyJ...
+
+Then: npm run seed
+`);
   process.exit(1);
 }
 
@@ -64,6 +74,7 @@ const users = [
     password: "Password123!",
     role: "admin",
     verification_status: "approved",
+    email_verified: true,
   },
   {
     username: "omar_verified",
@@ -74,6 +85,7 @@ const users = [
     password: "Password123!",
     role: "user",
     verification_status: "approved",
+    email_verified: true,
   },
   {
     username: "nada_foster",
@@ -84,6 +96,7 @@ const users = [
     password: "Password123!",
     role: "user",
     verification_status: "approved",
+    email_verified: true,
   },
   {
     username: "karim_seeker",
@@ -93,7 +106,8 @@ const users = [
     city: "Cairo",
     password: "Password123!",
     role: "user",
-    verification_status: "none",
+    verification_status: "pending",
+    email_verified: true,
   },
   {
     username: "lina_seeker",
@@ -104,6 +118,7 @@ const users = [
     password: "Password123!",
     role: "user",
     verification_status: "pending",
+    email_verified: true,
   },
   {
     username: "youssef_owner",
@@ -114,6 +129,7 @@ const users = [
     password: "Password123!",
     role: "user",
     verification_status: "approved",
+    email_verified: true,
   },
 ];
 
@@ -121,7 +137,7 @@ function petsFor(ids) {
   return [
     {
       owner_id: ids.omar,
-      category: "dog",
+      category: "dogs",
       img: "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg",
       name: "Luna",
       age: 2,
@@ -143,7 +159,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.omar,
-      category: "cat",
+      category: "cats",
       img: "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg",
       name: "Milo",
       age: 1,
@@ -165,7 +181,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.nada,
-      category: "rabbit",
+      category: "rabbits",
       img: "https://images.pexels.com/photos/4588065/pexels-photo-4588065.jpeg",
       name: "Coco",
       age: 3,
@@ -187,7 +203,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.nada,
-      category: "dog",
+      category: "dogs",
       img: "https://images.pexels.com/photos/1805164/pexels-photo-1805164.jpeg",
       name: "Rex",
       age: 4,
@@ -209,7 +225,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.youssef,
-      category: "bird",
+      category: "birds",
       img: "https://images.pexels.com/photos/1661179/pexels-photo-1661179.jpeg",
       name: "Kiwi",
       age: 1.5,
@@ -231,7 +247,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.youssef,
-      category: "cat",
+      category: "cats",
       img: "https://images.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg",
       name: "Nala",
       age: 2.5,
@@ -275,7 +291,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.omar,
-      category: "dog",
+      category: "dogs",
       img: "https://images.pexels.com/photos/2253275/pexels-photo-2253275.jpeg",
       name: "Shadow",
       age: 5,

@@ -13,7 +13,7 @@ export default function PostPetPage() {
   return (
     <>
       <Header />
-      <main className="pt-[90px]">
+      <main className="pt-[40px]">
         <PostPetForm />
       </main>
       <Footer />

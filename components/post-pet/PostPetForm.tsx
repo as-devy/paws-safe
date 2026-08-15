@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { startTransition, useActionState, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -10,20 +9,20 @@ import {
   Check,
   HeartHandshake,
   ImagePlus,
-  LoaderCircle,
   MapPin,
   PawPrint,
   Siren,
   Stethoscope,
 } from "lucide-react";
 import { COUNTRIES } from "@/lib/countries";
-import { getCookie } from "@/lib/auth";
+import { postPet, updatePet, type CreatePetState } from "@/lib/actions";
+import { CATEGORY_FILTERS, normalizeCategory, type Pet } from "@/lib/pets";
+import CategoryIcon from "@/components/pets/CategoryIcon";
 
-type Status = "idle" | "uploading" | "saving" | "success" | "error";
 type Step = 0 | 1 | 2;
 
 type FormState = {
-  listingType: "" | "rehome" | "foster";
+  listingType: "" | "adoption" | "foster";
   name: string;
   age: string;
   gender: "" | "male" | "female";
@@ -45,14 +44,19 @@ const STEPS = [
   { id: 2, label: "Care & story", icon: Stethoscope },
 ] as const;
 
-const CATEGORIES = [
-  { key: "dog", label: "Dog", src: "/imgs/dog.png" },
-  { key: "cat", label: "Cat", src: "/imgs/cat.png" },
-  { key: "rabbit", label: "Rabbit", src: "/imgs/rabbit.png" },
-  { key: "bird", label: "Bird", src: "/imgs/bird.png" },
-  { key: "fish", label: "Fish", src: "/imgs/fish.png" },
-  { key: "other", label: "Other", src: "/imgs/paw-outline.svg" },
-] as const;
+const CATEGORIES = CATEGORY_FILTERS.filter((item) => item.key !== "all").map(
+  (item) => ({
+    key: item.key as
+      | "dog"
+      | "cat"
+      | "rabbit"
+      | "bird"
+      | "fish"
+      | "other",
+    label: item.label.replace(/s$/, ""),
+    color: item.color,
+  }),
+);
 
 const initialForm: FormState = {
   listingType: "",
@@ -71,6 +75,71 @@ const initialForm: FormState = {
   description: "",
 };
 
+const STEP_ERROR_KEYS: Record<Step, Array<keyof NonNullable<CreatePetState["errors"]>>> = {
+  0: ["img", "listingType", "name", "age", "gender", "category"],
+  1: ["country", "streetAddress", "city", "postCode"],
+  2: ["description", "vaccines", "health", "diet", "behavior", "emergency"],
+};
+
+function FieldErrors({ messages }: { messages?: string[] }) {
+  if (!messages?.length) return null;
+  return (
+    <div aria-live="polite">
+      {messages.map((error) => (
+        <p className="post-field-error" key={error}>
+          {error}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function firstErrorStep(errors?: CreatePetState["errors"]): Step | null {
+  if (!errors) return null;
+  for (const step of [0, 1, 2] as const) {
+    if (STEP_ERROR_KEYS[step].some((key) => errors[key]?.length)) {
+      return step;
+    }
+  }
+  return null;
+}
+
+function isFilled(value: string) {
+  return value.trim().length > 0;
+}
+
+function isValidAge(value: string) {
+  if (!isFilled(value)) return false;
+  const age = Number(value);
+  return Number.isFinite(age) && age >= 0 && age <= 99.9;
+}
+
+function isStepComplete(
+  step: Step,
+  form: FormState,
+  preview: string | null,
+) {
+  if (step === 0) {
+    return Boolean(
+      preview &&
+        form.listingType &&
+        isFilled(form.name) &&
+        isValidAge(form.age) &&
+        form.gender &&
+        form.category,
+    );
+  }
+  if (step === 1) {
+    return (
+      isFilled(form.country) &&
+      isFilled(form.streetAddress) &&
+      isFilled(form.city) &&
+      isFilled(form.postCode)
+    );
+  }
+  return isFilled(form.description);
+}
+
 function shortenFileName(filename: string) {
   const lastDotIndex = filename.lastIndexOf(".");
   if (lastDotIndex === -1) {
@@ -83,20 +152,77 @@ function shortenFileName(filename: string) {
     : filename;
 }
 
-export default function PostPetForm() {
-  const router = useRouter();
+const CATEGORY_KEYS = [
+  "dog",
+  "cat",
+  "rabbit",
+  "bird",
+  "fish",
+  "other",
+] as const;
+
+function petToForm(pet?: Pet): FormState {
+  if (!pet) return initialForm;
+
+  const gender = pet.gender?.toLowerCase();
+  const category = normalizeCategory(pet.category);
+  const knownCategory = CATEGORY_KEYS.includes(
+    category as (typeof CATEGORY_KEYS)[number],
+  )
+    ? (category as FormState["category"])
+    : "";
+
+  return {
+    listingType: pet.status === "foster" ? "foster" : "adoption",
+    name: pet.name,
+    age: pet.age === "" || pet.age == null ? "" : String(pet.age),
+    gender: gender === "male" || gender === "female" ? gender : "",
+    category: knownCategory,
+    country: (pet.country || "egypt").toLowerCase(),
+    streetAddress: pet.street_address ?? pet.streetAddress ?? "",
+    city: pet.city ?? "",
+    postCode: pet.post_code ?? pet.postCode ?? "",
+    vaccines: pet.vaccines_prevention ?? "",
+    health: pet.health_history ?? "",
+    diet: pet.diet ?? "",
+    behavior: pet.behavior ?? "",
+    description: pet.description ?? "",
+  };
+}
+
+export default function PostPetForm({
+  pet,
+  cancelHref = "/profile",
+  returnTo,
+}: {
+  pet?: Pet;
+  cancelHref?: string;
+  returnTo?: string;
+}) {
+  const isEdit = Boolean(pet);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState<Step>(0);
-  const [form, setForm] = useState<FormState>(initialForm);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [fileLabel, setFileLabel] = useState("Add a clear photo");
-  const [base64Image, setBase64Image] = useState<string | null>(null);
-  const [emergency, setEmergency] = useState(false);
-  const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState("");
+  const [form, setForm] = useState<FormState>(() => petToForm(pet));
+  const [preview, setPreview] = useState<string | null>(pet?.img || null);
+  const [fileLabel, setFileLabel] = useState(
+    pet?.img ? "Current photo" : "Add a clear photo",
+  );
+  const [emergency, setEmergency] = useState(Boolean(pet?.emergency));
+  const initialState: CreatePetState = { message: null };
+  const [state, formAction, pending] = useActionState(
+    isEdit ? updatePet : postPet,
+    initialState,
+  );
+  const errors = state?.errors;
+  const message = state?.message;
 
   const progress = useMemo(() => ((step + 1) / STEPS.length) * 100, [step]);
-  const busy = status === "uploading" || status === "saving";
+  const canContinue = isStepComplete(step, form, preview);
+
+  useEffect(() => {
+    const nextStep = firstErrorStep(errors);
+    if (nextStep != null) setStep(nextStep);
+  }, [errors]);
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -110,129 +236,30 @@ export default function PostPetForm() {
     setFileLabel(shortenFileName(file.name));
     const reader = new FileReader();
     reader.onload = () => {
-      const result = String(reader.result ?? "");
-      setPreview(result);
-      setBase64Image(result.split(",")[1] ?? null);
+      setPreview(String(reader.result ?? ""));
     };
     reader.readAsDataURL(file);
   }
 
-  function validateStep(current: Step) {
-    if (current === 0) {
-      if (!base64Image) return "Please add a photo of your pet.";
-      if (!form.listingType) return "Choose adoption or foster.";
-      if (!form.name.trim()) return "Please enter your pet’s name.";
-      if (!form.age.trim()) return "Please enter your pet’s age.";
-      if (!form.gender) return "Please select a gender.";
-      if (!form.category) return "Please choose a category.";
-    }
-    if (current === 1) {
-      if (!form.country) return "Please select a country.";
-      if (!form.streetAddress.trim()) return "Please enter a street address.";
-      if (!form.city.trim()) return "Please enter a city.";
-      if (!form.postCode.trim()) return "Please enter a post code.";
-    }
-    if (current === 2) {
-      if (!form.description.trim()) {
-        return "Please add a short description for adopters.";
-      }
-    }
-    return "";
-  }
-
   function goNext() {
-    const message = validateStep(step);
-    if (message) {
-      setError(message);
-      return;
-    }
-    setError("");
+    if (!isStepComplete(step, form, preview)) return;
     setStep((s) => Math.min(2, s + 1) as Step);
   }
 
   function goBack() {
-    setError("");
     setStep((s) => Math.max(0, s - 1) as Step);
   }
 
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (step !== 2) {
-      goNext();
-      return;
-    }
-
-    const message = validateStep(2);
-    if (message) {
-      setError(message);
-      return;
-    }
-
-    const userId = getCookie("UserId");
-    if (!userId) {
-      setError("Please log in before posting a pet.");
-      return;
-    }
-    if (!base64Image || !form.listingType) return;
-
-    const rehoming = form.listingType === "rehome" ? 1 : 0;
-    const foster = form.listingType === "foster" ? 1 : 0;
-
-    try {
-      setStatus("uploading");
-      setError("");
-
-      const uploadBody = new FormData();
-      uploadBody.append("key", "2750377068f6e1a5530b8e8e9a5d522b");
-      uploadBody.append("image", base64Image);
-
-      const uploadRes = await fetch("https://api.imgbb.com/1/upload", {
-        method: "POST",
-        body: uploadBody,
+  function handlePost() {
+    startTransition(() => {
+      formAction({
+        ...form,
+        petId: pet?.id,
+        img: preview ?? "",
+        emergency,
+        returnTo,
       });
-      const uploadJson = await uploadRes.json();
-      if (!uploadJson?.success) throw new Error("Image upload failed");
-
-      setStatus("saving");
-      const petPayload = {
-        ownerId: userId,
-        img: uploadJson.data.url as string,
-        rehoming,
-        foster,
-        emergency: emergency ? 1 : 0,
-        name: form.name.trim(),
-        age: form.age.trim(),
-        category: form.category,
-        gender: form.gender,
-        country: form.country,
-        streetAddress: form.streetAddress.trim(),
-        city: form.city.trim(),
-        postCode: form.postCode.trim(),
-        vaccines_prevention: form.vaccines.trim(),
-        health_history: form.health.trim(),
-        diet: form.diet.trim(),
-        behavior: form.behavior.trim(),
-        description: form.description.trim(),
-        requests: [],
-      };
-
-      const saveRes = await fetch("https://pawssafe.ddns.net/addPet", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(petPayload),
-      });
-      const saveJson = await saveRes.json();
-      if (!saveJson?.petId) throw new Error("Could not save pet");
-
-      setStatus("success");
-      window.setTimeout(() => {
-        router.push(rehoming ? "/adoption" : "/foster");
-      }, 900);
-    } catch (err) {
-      console.error(err);
-      setStatus("error");
-      setError("Something went wrong while posting. Please try again.");
-    }
+    });
   }
 
   return (
@@ -241,19 +268,34 @@ export default function PostPetForm() {
       <div className="post-stage__pattern" aria-hidden />
 
       <div className="post-stage__frame">
-        <header className="post-stage__intro">
-          <p className="post-stage__kicker">Find them a home</p>
-          <h1>Post your pet in a few easy steps</h1>
+        <header className={`post-stage__intro${isEdit ? " post-stage__intro--wide" : ""}`}>
+          <p className="post-stage__kicker">
+            {isEdit ? "Keep their story current" : "Find them a home"}
+          </p>
+          <h1>
+            {isEdit
+              ? `Edit ${pet?.name ?? "listing"}`
+              : "Post your pet in a few easy steps"}
+          </h1>
           <p>
-            Share a photo, basics, and care notes so the right family can
-            respond with confidence.
+            {isEdit
+              ? "Update the photo, basics, or care notes. Changes go live as soon as you save."
+              : "Share a photo, basics, and care notes so the right family can respond with confidence."}
           </p>
           <p className="post-stage__crumb">
-            <Link href="/">Home</Link> <span aria-hidden>&gt;</span> Post Pet
+            <Link href="/">Home</Link> <span aria-hidden>&gt;</span>{" "}
+            {isEdit ? (
+              <>
+                <Link href={cancelHref}>{cancelHref === "/admin" ? "Admin" : "Profile"}</Link> <span aria-hidden>&gt;</span>{" "}
+                Edit
+              </>
+            ) : (
+              "Post Pet"
+            )}
           </p>
         </header>
 
-        <form className="post-wizard" onSubmit={onSubmit}>
+        <form className="post-wizard">
           <div className="post-wizard__progress" aria-hidden>
             <span style={{ width: `${progress}%` }} />
           </div>
@@ -299,8 +341,14 @@ export default function PostPetForm() {
                   onClick={() => fileInputRef.current?.click()}
                 >
                   {preview ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={preview} alt="Pet preview" />
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={preview} alt="Pet preview" />
+                      <span className="post-dropzone__overlay">
+                        <ImagePlus className="h-5 w-5" />
+                        Change photo
+                      </span>
+                    </>
                   ) : (
                     <>
                       <ImagePlus className="h-8 w-8" />
@@ -310,13 +358,14 @@ export default function PostPetForm() {
                   )}
                 </button>
                 <p className="post-dropzone__meta">{fileLabel}</p>
+                <FieldErrors messages={errors?.img} />
 
                 <p className="post-label">I am posting for</p>
                 <div className="post-type-grid">
                   <button
                     type="button"
-                    className={`post-type${form.listingType === "rehome" ? " is-active" : ""}`}
-                    onClick={() => update("listingType", "rehome")}
+                    className={`post-type${form.listingType === "adoption" ? " is-active" : ""}`}
+                    onClick={() => update("listingType", "adoption")}
                   >
                     <HeartHandshake className="h-5 w-5" />
                     <strong>Adoption</strong>
@@ -332,6 +381,7 @@ export default function PostPetForm() {
                     <span>Needs temporary care</span>
                   </button>
                 </div>
+                <FieldErrors messages={errors?.listingType} />
 
                 <div className="post-grid-2">
                   <div>
@@ -345,6 +395,7 @@ export default function PostPetForm() {
                       onChange={(e) => update("name", e.target.value)}
                       placeholder="e.g. Luna"
                     />
+                    <FieldErrors messages={errors?.name} />
                   </div>
                   <div>
                     <label className="post-label" htmlFor="petAge">
@@ -360,6 +411,7 @@ export default function PostPetForm() {
                       onChange={(e) => update("age", e.target.value)}
                       placeholder="e.g. 2"
                     />
+                    <FieldErrors messages={errors?.age} />
                   </div>
                 </div>
 
@@ -376,6 +428,7 @@ export default function PostPetForm() {
                     </button>
                   ))}
                 </div>
+                <FieldErrors messages={errors?.gender} />
 
                 <p className="post-label">Category</p>
                 <div className="post-category-grid">
@@ -384,14 +437,18 @@ export default function PostPetForm() {
                       key={cat.key}
                       type="button"
                       className={`post-category${form.category === cat.key ? " is-active" : ""}`}
+                      style={{ "--cat-accent": cat.color } as CSSProperties}
                       onClick={() => update("category", cat.key)}
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={cat.src} alt="" />
+                      <CategoryIcon
+                        category={cat.key}
+                        className="h-8 w-8"
+                      />
                       <span>{cat.label}</span>
                     </button>
                   ))}
                 </div>
+                <FieldErrors messages={errors?.category} />
               </div>
             )}
 
@@ -417,6 +474,7 @@ export default function PostPetForm() {
                     </option>
                   ))}
                 </select>
+                <FieldErrors messages={errors?.country} />
 
                 <label className="post-label" htmlFor="streetAddress">
                   Street address
@@ -428,6 +486,7 @@ export default function PostPetForm() {
                   onChange={(e) => update("streetAddress", e.target.value)}
                   placeholder="Street and number"
                 />
+                <FieldErrors messages={errors?.streetAddress} />
 
                 <div className="post-grid-2">
                   <div>
@@ -441,6 +500,7 @@ export default function PostPetForm() {
                       onChange={(e) => update("city", e.target.value)}
                       placeholder="City"
                     />
+                    <FieldErrors messages={errors?.city} />
                   </div>
                   <div>
                     <label className="post-label" htmlFor="postCode">
@@ -453,6 +513,7 @@ export default function PostPetForm() {
                       onChange={(e) => update("postCode", e.target.value)}
                       placeholder="Post code"
                     />
+                    <FieldErrors messages={errors?.postCode} />
                   </div>
                 </div>
               </div>
@@ -462,7 +523,7 @@ export default function PostPetForm() {
               <div className="post-step">
                 <div className="post-step__head">
                   <h2>Care notes & story</h2>
-                  <p>Optional medical details help, description is required.</p>
+                  <p>Optional medical details and a short story about this pet.</p>
                 </div>
 
                 <div className="post-stack">
@@ -507,6 +568,7 @@ export default function PostPetForm() {
                   value={form.description}
                   onChange={(e) => update("description", e.target.value)}
                 />
+                <FieldErrors messages={errors?.description} />
 
                 <label
                   className={`post-emergency${emergency ? " is-on" : ""}`}
@@ -525,27 +587,10 @@ export default function PostPetForm() {
             )}
           </div>
 
-          {error && (
-            <p className="post-alert post-alert--error">
+          {message && (
+            <p className="post-alert post-alert--error" role="alert">
               <AlertTriangle className="h-4 w-4 shrink-0" />
-              <span>
-                {error}
-                {error.includes("log in") && (
-                  <>
-                    {" "}
-                    <Link href="/login" className="underline font-bold">
-                      Go to login
-                    </Link>
-                  </>
-                )}
-              </span>
-            </p>
-          )}
-
-          {status === "success" && (
-            <p className="post-alert post-alert--ok">
-              <Check className="h-4 w-4" />
-              Pet posted successfully. Redirecting…
+              <span>{message}</span>
             </p>
           )}
 
@@ -554,30 +599,37 @@ export default function PostPetForm() {
               type="button"
               className="post-btn post-btn--ghost"
               onClick={goBack}
-              disabled={step === 0 || busy}
+              disabled={step === 0 || pending}
             >
               <ArrowLeft className="h-4 w-4" />
               Back
             </button>
 
             {step < 2 ? (
-              <button type="button" className="post-btn" onClick={goNext}>
+              <button
+                type="button"
+                className="post-btn"
+                onClick={goNext}
+                disabled={!canContinue}
+              >
                 Continue
                 <ArrowRight className="h-4 w-4" />
               </button>
             ) : (
-              <button type="submit" className="post-btn" disabled={busy}>
-                {busy ? (
-                  <>
-                    <LoaderCircle className="h-4 w-4 animate-spin" />
-                    {status === "uploading" ? "Uploading…" : "Publishing…"}
-                  </>
-                ) : (
-                  <>
-                    Post pet
-                    <Check className="h-4 w-4" />
-                  </>
-                )}
+              <button
+                type="button"
+                className="post-btn"
+                onClick={handlePost}
+                disabled={pending || !canContinue}
+              >
+                {pending
+                  ? isEdit
+                    ? "Saving…"
+                    : "Posting…"
+                  : isEdit
+                    ? "Save changes"
+                    : "Post pet"}
+                <Check className="h-4 w-4" />
               </button>
             )}
           </div>

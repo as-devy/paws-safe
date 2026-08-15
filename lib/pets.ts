@@ -1,5 +1,7 @@
 export type ListingMode = "adoption" | "foster";
 
+export type PetStatus = "adoption" | "foster";
+
 export type Pet = {
   id: string | number;
   name: string;
@@ -9,11 +11,23 @@ export type Pet = {
   description: string;
   category: string;
   img: string;
-  foster?: boolean | number;
-  rehoming?: boolean | number;
+  status: PetStatus;
   emergency?: boolean | number;
   requested?: boolean | number;
   requests?: string | unknown[];
+  /** Prefer this when loaded via Prisma */
+  request_count?: number;
+  gender?: string | null;
+  vaccines_prevention?: string | null;
+  health_history?: string | null;
+  diet?: string | null;
+  behavior?: string | null;
+  ownerId?: string | number;
+  owner_id?: string | number;
+  streetAddress?: string | null;
+  street_address?: string | null;
+  postCode?: string | null;
+  post_code?: string | null;
 };
 
 export const KNOWN_CATEGORIES = [
@@ -26,52 +40,76 @@ export const KNOWN_CATEGORIES = [
 
 export type KnownCategory = (typeof KNOWN_CATEGORIES)[number];
 
+/** DB may store plural enums (dogs/cats); UI filters use singular. */
+export function normalizeCategory(category: string): string {
+  const value = category.trim().toLowerCase();
+  const map: Record<string, string> = {
+    dogs: "dog",
+    dog: "dog",
+    cats: "cat",
+    cat: "cat",
+    birds: "bird",
+    bird: "bird",
+    rabbits: "rabbit",
+    rabbit: "rabbit",
+    fish: "fish",
+    others: "other",
+    other: "other",
+  };
+  return map[value] ?? value;
+}
+
+/** Convert UI category keys to the values stored in the database. */
+export function toDbCategory(category: string): string {
+  const value = normalizeCategory(category);
+  const map: Record<string, string> = {
+    dog: "dogs",
+    cat: "cats",
+    bird: "birds",
+    rabbit: "rabbits",
+    fish: "fish",
+    other: "others",
+  };
+  return map[value] ?? value;
+}
+
 export const CATEGORY_FILTERS = [
   {
     key: "all",
     label: "All",
     color: "var(--primary)",
-    icon: "paw" as const,
   },
   {
     key: "dog",
     label: "Dogs",
     color: "#ff3d41",
-    iconSrc: "/imgs/category-dog.svg",
   },
   {
     key: "cat",
     label: "Cats",
     color: "#ffb13d",
-    iconSrc: "/imgs/category-cats.svg",
   },
   {
     key: "rabbit",
     label: "Rabbits",
     color: "#3d68ff",
-    iconSrc: "/imgs/category-rabbit.svg",
   },
   {
     key: "bird",
     label: "Birds",
     color: "#ff27b6",
-    iconSrc: "/imgs/category-birds.svg",
   },
   {
     key: "fish",
     label: "Fish",
     color: "#21cd1e",
-    iconSrc: "/imgs/category-fish.svg",
   },
   {
     key: "other",
     label: "Others",
     color: "#ac46ec",
-    iconSrc: "/imgs/category-others.svg",
   },
 ] as const;
-
-export const PETS_API = "https://pawssafe.ddns.net/allPets";
 
 export function countrySlug(country: string) {
   return country.toLowerCase().replace(/\s+/g, "_");
@@ -83,6 +121,7 @@ export function isTruthy(value: boolean | number | undefined) {
 
 export function getRequestCount(pet: Pet) {
   if (pet.requested) return null;
+  if (typeof pet.request_count === "number") return pet.request_count;
   try {
     const parsed =
       typeof pet.requests === "string"
@@ -94,12 +133,62 @@ export function getRequestCount(pet: Pet) {
   }
 }
 
+export function petDetailHref(petOrId: Pet | string | number) {
+  const id = typeof petOrId === "object" ? String(petOrId.id) : String(petOrId);
+  // IDs are base64 and may include "/" or "+" — encode each segment-safe path
+  return `/pets/${encodeURIComponent(id)}`;
+}
+
+export function petEditHref(petOrId: Pet | string | number) {
+  const id = typeof petOrId === "object" ? String(petOrId.id) : String(petOrId);
+  return `/profile/pets/${encodeURIComponent(id)}`;
+}
+
+export function adminPetEditHref(petOrId: Pet | string | number) {
+  const id = typeof petOrId === "object" ? String(petOrId.id) : String(petOrId);
+  return `/admin/pets/${encodeURIComponent(id)}`;
+}
+
+export function adminUserEditHref(userId: string) {
+  return `/admin/users/${encodeURIComponent(userId)}`;
+}
+
+export function userProfileHref(userId: string) {
+  return `/users/${encodeURIComponent(userId)}`;
+}
+
+export function decodePetIdParam(idParam: string | string[]) {
+  const raw = Array.isArray(idParam) ? idParam.join("/") : idParam;
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
+export function petListingHref(pet: Pet) {
+  return pet.status === "foster" ? "/foster" : "/adoption";
+}
+
+export function petModeLabel(pet: Pet) {
+  return pet.status === "foster" ? "Foster" : "Adoption";
+}
+
+export function isFosterPet(pet: Pet) {
+  return pet.status === "foster";
+}
+
+export function isAdoptionPet(pet: Pet) {
+  return pet.status === "adoption";
+}
+
 export function matchesCategory(pet: Pet, category: string) {
   if (category === "all") return true;
+  const petCategory = normalizeCategory(pet.category);
   if (category === "other") {
-    return !KNOWN_CATEGORIES.includes(pet.category as KnownCategory);
+    return !KNOWN_CATEGORIES.includes(petCategory as KnownCategory);
   }
-  return pet.category === category;
+  return petCategory === category;
 }
 
 export function countCategories(pets: Pet[]) {
@@ -114,20 +203,13 @@ export function countCategories(pets: Pet[]) {
   };
 
   pets.forEach((pet) => {
-    if (KNOWN_CATEGORIES.includes(pet.category as KnownCategory)) {
-      counts[pet.category as KnownCategory]++;
+    const petCategory = normalizeCategory(pet.category);
+    if (KNOWN_CATEGORIES.includes(petCategory as KnownCategory)) {
+      counts[petCategory as KnownCategory]++;
     } else {
       counts.other++;
     }
   });
 
   return counts;
-}
-
-export async function fetchAllPets(): Promise<Pet[]> {
-  const response = await fetch(PETS_API, { cache: "no-store" });
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
-  }
-  return response.json();
 }

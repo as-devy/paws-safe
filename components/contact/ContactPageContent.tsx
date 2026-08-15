@@ -3,16 +3,17 @@
 import Image from "next/image";
 import { FormEvent, useState } from "react";
 import {
-  Check,
   Clock3,
   LoaderCircle,
   Mail,
   MapPin,
   MessageCircle,
   Phone,
+  Send,
+  Tag,
+  UserRound,
 } from "lucide-react";
-
-type Status = "idle" | "sending" | "sent" | "error";
+import SiteToast from "@/components/ui/SiteToast";
 
 const channels = [
   {
@@ -38,18 +39,20 @@ const channels = [
 ];
 
 export default function ContactPageContent() {
-  const [status, setStatus] = useState<Status>("idle");
+  const [sending, setSending] = useState(false);
+  const [toast, setToast] = useState(false);
 
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    setStatus("sending");
+    setSending(true);
 
     window.setTimeout(() => {
-      setStatus("sent");
       form.reset();
-      window.setTimeout(() => setStatus("idle"), 4000);
-    }, 800);
+      setSending(false);
+      setToast(false);
+      window.requestAnimationFrame(() => setToast(true));
+    }, 600);
   }
 
   return (
@@ -87,84 +90,107 @@ export default function ContactPageContent() {
         />
       </aside>
 
-      <form className="form-card contact-form" onSubmit={onSubmit}>
-        <div className="form-card__head">
-          <span className="form-card__icon">
+      <form className="home-contact__panel" onSubmit={onSubmit}>
+        <div className="home-contact__head">
+          <span className="home-contact__icon">
             <MessageCircle className="h-5 w-5" />
           </span>
           <div>
+            <p className="home-contact__kicker">We&apos;re here to help</p>
             <h2>Send us a message</h2>
-            <p>We usually reply within one business day.</p>
+            <p>Questions about adopt, foster, or posting a pet? We usually reply within a day.</p>
           </div>
         </div>
 
-        <label className="form-label" htmlFor="contact_name">
-          Name
-        </label>
-        <input
-          id="contact_name"
-          name="name"
-          type="text"
-          className="form-control"
-          required
-        />
+        <div className="home-contact__grid">
+          <label className="home-contact__field" htmlFor="page_contact_name">
+            <span>
+              <UserRound className="h-3.5 w-3.5" />
+              Name
+            </span>
+            <input
+              type="text"
+              id="page_contact_name"
+              name="name"
+              autoComplete="name"
+              placeholder="Your name"
+              required
+            />
+          </label>
 
-        <label className="form-label" htmlFor="contact_email">
-          Email address
-        </label>
-        <input
-          id="contact_email"
-          name="email"
-          type="email"
-          className="form-control"
-          required
-        />
+          <label className="home-contact__field" htmlFor="page_contact_email">
+            <span>
+              <Mail className="h-3.5 w-3.5" />
+              Email
+            </span>
+            <input
+              type="email"
+              id="page_contact_email"
+              name="email"
+              autoComplete="email"
+              placeholder="you@example.com"
+              required
+            />
+          </label>
+        </div>
 
-        <label className="form-label" htmlFor="contact_topic">
-          Topic
+        <label className="home-contact__field" htmlFor="page_contact_topic">
+          <span>
+            <Tag className="h-3.5 w-3.5" />
+            Topic
+          </span>
+          <select
+            id="page_contact_topic"
+            name="topic"
+            defaultValue="general"
+          >
+            <option value="general">General question</option>
+            <option value="adoption">Adoption help</option>
+            <option value="foster">Foster help</option>
+            <option value="posting">Posting a pet</option>
+            <option value="donation">Donation</option>
+          </select>
         </label>
-        <select id="contact_topic" name="topic" className="form-control" defaultValue="general">
-          <option value="general">General question</option>
-          <option value="adoption">Adoption help</option>
-          <option value="foster">Foster help</option>
-          <option value="posting">Posting a pet</option>
-          <option value="donation">Donation</option>
-        </select>
 
-        <label className="form-label" htmlFor="contact_message">
-          Message
+        <label className="home-contact__field" htmlFor="page_contact_message">
+          <span>
+            <MessageCircle className="h-3.5 w-3.5" />
+            Message
+          </span>
+          <textarea
+            id="page_contact_message"
+            name="message"
+            rows={5}
+            placeholder="How can we help?"
+            required
+          />
         </label>
-        <textarea
-          id="contact_message"
-          name="message"
-          rows={5}
-          className="form-control"
-          required
-          placeholder="How can we help?"
-        />
 
         <button
           type="submit"
-          className="form-submit form-submit--danger"
-          disabled={status === "sending"}
+          disabled={sending}
+          className="home-contact__submit"
         >
-          {status === "sending" ? (
+          {sending ? (
             <>
               <LoaderCircle className="h-4 w-4 animate-spin" />
               Sending…
             </>
           ) : (
-            "Send message"
+            <>
+              <Send className="h-4 w-4" />
+              Send message
+            </>
           )}
         </button>
-
-        {status === "sent" && (
-          <p className="form-alert form-alert--ok">
-            <Check className="h-4 w-4" />
-            Message sent successfully
-          </p>
-        )}
       </form>
+
+      {toast ? (
+        <SiteToast
+          message="Your message has been sent successfully."
+          onClose={() => setToast(false)}
+        />
+      ) : null}
     </div>
   );
 }

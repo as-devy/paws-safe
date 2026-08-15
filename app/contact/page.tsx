@@ -14,7 +14,7 @@ export default function ContactPage() {
   return (
     <>
       <Header />
-      <main className="pt-[90px]">
+      <main className="pt-[40px]">
         <PageBanner title="Contact Us" crumb="Contact" variant="contact" />
         <section className="form-page">
           <ContactPageContent />

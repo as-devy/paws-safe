@@ -427,7 +427,7 @@ textarea.form-control {
   box-shadow: 0 14px 36px var(--shadow);
 }
 
-.contact-form .form-submit {
+.contact-layout .home-contact__panel {
   width: 100%;
   max-width: none;
 }
@@ -441,4 +441,89 @@ textarea.form-control {
   .form-page {
     padding-top: 1.75rem;
   }
+}
+
+.terms-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.terms-copy h2 {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-outfit), system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--heading);
+}
+
+.terms-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.site-toast {
+  position: fixed;
+  z-index: 90;
+  right: 1.1rem;
+  bottom: 5.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  max-width: min(22.5rem, calc(100vw - 2.2rem));
+  padding: 0.85rem 0.9rem;
+  border-radius: 1rem;
+  background: var(--card);
+  color: var(--heading);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 16px 36px var(--shadow);
+  opacity: 0;
+  transform: translateY(0.7rem);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.site-toast.is-open {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.site-toast__icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  color: #fff;
+  background: linear-gradient(145deg, #3de0d6, var(--primary) 52%, var(--primary-dark));
+}
+
+.site-toast p {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.site-toast__close {
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  margin-left: auto;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--heading) 8%, transparent);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.site-toast__close:hover {
+  color: var(--heading);
+  background: color-mix(in oklab, var(--heading) 12%, transparent);
 }

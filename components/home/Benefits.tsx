@@ -37,8 +37,8 @@ function BenefitItem({
   text: string;
 }) {
   return (
-    <div className="flex items-start gap-4">
-      <div className="benefit-icon flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-primary text-white sm:h-20 sm:w-20">
+    <div className="benefit-item">
+      <div className="benefit-icon">
         <Icon className="h-7 w-7 sm:h-8 sm:w-8" />
       </div>
       <div>
@@ -53,8 +53,8 @@ function BenefitItem({
 
 export default function Benefits() {
   return (
-    <section className="pt-28 pb-16 sm:pt-36 sm:pb-20">
-      <div className="mx-auto w-[min(1200px,92%)]">
+    <section className="benefits">
+      <div className="relative z-[1] mx-auto w-[min(1200px,92%)]">
         <div className="reveal-child mx-auto mb-12 max-w-3xl text-center sm:mb-16">
           <span className="text-sm font-bold tracking-wide text-primary uppercase">
             What We Do
@@ -69,20 +69,22 @@ export default function Benefits() {
           </p>
         </div>
 
-        <div className="grid items-center gap-10 lg:grid-cols-[1fr_auto_1fr] lg:gap-8">
-          <div className="reveal-child flex flex-col gap-10">
+        <div className="grid items-center gap-10 lg:grid-cols-[1fr_minmax(240px,380px)_1fr] lg:gap-8">
+          <div className="reveal-child flex flex-col gap-10 lg:items-end">
             {leftBenefits.map((b) => (
               <BenefitItem key={b.title} {...b} />
             ))}
           </div>
 
-          <div className="reveal-child mx-auto">
+          <div className="benefits__stage reveal-child">
+            <div className="benefits__orb" aria-hidden />
+            <div className="benefits__ring" aria-hidden />
             <Image
-              src="/imgs/benefits.png"
-              alt="Pets finding loving homes"
-              width={350}
-              height={350}
-              className="h-auto w-56 object-contain sm:w-72 lg:w-80"
+              src="/imgs/benefits-natural.png"
+              alt="A collie and a cat sitting together at home"
+              width={640}
+              height={640}
+              className="benefits__photo"
             />
           </div>
 

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="280" viewBox="0 0 520 280">
+  <defs>
+    <style>
+      .a { fill: none; stroke: #7ec8c3; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; opacity: 0.5; }
+      .b { fill: none; stroke: #9fd9d5; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; opacity: 0.32; }
+    </style>
+  </defs>
+  <g class="a" transform="translate(18 40)">
+    <path d="M8 28 Q24 8 40 28"/>
+    <path d="M40 28 Q56 8 72 28"/>
+    <circle cx="40" cy="30" r="5"/>
+  </g>
+  <g class="b" transform="translate(130 90)">
+    <ellipse cx="34" cy="28" rx="22" ry="12"/>
+    <path d="M14 28 L2 18 L6 28 L2 38 Z"/>
+    <path d="M34 16 Q40 8 46 16"/>
+  </g>
+  <g class="a" transform="translate(230 28)">
+    <ellipse cx="30" cy="30" rx="18" ry="12"/>
+    <circle cx="46" cy="22" r="9"/>
+    <path d="M42 14 Q40 0 46 12"/>
+    <path d="M50 12 Q54 0 52 14"/>
+    <path d="M14 34 Q6 40 10 46"/>
+  </g>
+  <g class="b" transform="translate(340 110)">
+    <ellipse cx="28" cy="30" rx="18" ry="12"/>
+    <circle cx="44" cy="24" r="8"/>
+    <path d="M50 24 L60 22"/>
+    <path d="M18 28 Q8 18 4 28 Q12 34 18 30"/>
+  </g>
+  <g class="a" transform="translate(430 36)">
+    <ellipse cx="30" cy="28" rx="20" ry="10"/>
+    <path d="M48 28 L62 18 L58 28 L62 38 Z"/>
+    <path d="M24 18 Q30 10 36 18"/>
+  </g>
+  <g class="b" transform="translate(40 170)">
+    <ellipse cx="30" cy="28" rx="20" ry="10"/>
+    <path d="M48 28 L62 18 L58 28 L62 38 Z"/>
+  </g>
+  <g class="a" transform="translate(200 175)">
+    <path d="M8 28 Q24 8 40 28"/>
+    <path d="M40 28 Q56 8 72 28"/>
+    <circle cx="40" cy="30" r="5"/>
+  </g>
+  <g class="b" transform="translate(360 185)">
+    <ellipse cx="30" cy="30" rx="18" ry="12"/>
+    <circle cx="46" cy="22" r="9"/>
+    <path d="M42 14 Q40 0 46 12"/>
+    <path d="M50 12 Q54 0 52 14"/>
+  </g>
+</svg>

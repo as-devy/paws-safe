@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model pet_requests {
+  id                  BigInt   @id @default(autoincrement())
+  status              String   @default("pending")
+  foster_duration     String?
+  pets_allowed        String?
+  household           String?
+  other_pets          String?
+  pet_experience      String?
+  time_commitment     String?
+  financial_prepared  String?
+  full_name           String?
+  email               String?
+  phone               String?
+  message             String?
+  created_at          DateTime @default(now()) @db.Timestamptz(6)
+  updated_at          DateTime @default(now()) @db.Timestamptz(6)
+  requester_id        String
+  pet_id              String
+  pets                pets            @relation(fields: [pet_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  users               users           @relation(fields: [requester_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  notifications       notifications[]
+  messages            messages[]
+
+  @@unique([pet_id, requester_id])
+  @@index([pet_id])
+  @@index([requester_id])
+  @@index([status])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model pets {
+  category            String
+  img                 String?
+  name                String
+  age                 Decimal?       @db.Decimal(4, 1)
+  gender              String?
+  description         String?
+  country             String?
+  street_address      String?
+  city                String?
+  post_code           String?
+  vaccines_prevention String?
+  health_history      String?
+  diet                String?
+  behavior            String?
+  status              pet_status     @default(adoption)
+  emergency           Boolean        @default(false)
+  requested           Boolean        @default(false)
+  created_at          DateTime       @default(now()) @db.Timestamptz(6)
+  owner_id            String
+  id                  String         @id @default(dbgenerated("generate_base64_id()"))
+  pet_requests        pet_requests[]
+  notifications       notifications[]
+  messages            messages[]
+  users               users          @relation(fields: [owner_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([owner_id])
+  @@index([status])
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model users {
+  created_at          DateTime             @default(now()) @db.Timestamptz(6)
+  username            String?
+  email               String?              @unique
+  phone               String?
+  country             String?
+  city                String?
+  password            String?
+  verification_status verification_status? @default(pending)
+  email_verified      Boolean              @default(false)
+  role                user_role            @default(user)
+  id                  String               @id @default(dbgenerated("generate_base64_id()"))
+  pet_requests             pet_requests[]
+  pets                     pets[]
+  notifications_received   notifications[] @relation("notifications_recipient")
+  notifications_sent       notifications[] @relation("notifications_actor")
+  messages_sent            messages[]      @relation("message_sender")
+  messages_owned           messages[]      @relation("message_owner")
+  messages_visiting        messages[]      @relation("message_visitor")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model notifications {
+  id           BigInt         @id @default(autoincrement())
+  user_id      String
+  type         String
+  title        String
+  body         String
+  href         String
+  pet_id       String?
+  request_id   BigInt?
+  actor_id     String?
+  read_at      DateTime?      @db.Timestamptz(6)
+  created_at   DateTime       @default(now()) @db.Timestamptz(6)
+  recipient    users          @relation("notifications_recipient", fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  actor        users?         @relation("notifications_actor", fields: [actor_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  pets         pets?          @relation(fields: [pet_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  pet_requests pet_requests?  @relation(fields: [request_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([user_id, created_at])
+}
+
+model messages {
+  id           BigInt         @id @default(autoincrement())
+  request_id   BigInt?
+  pet_id       String?
+  owner_id     String
+  visitor_id   String
+  sender_id    String
+  body         String
+  created_at   DateTime       @default(now()) @db.Timestamptz(6)
+  pet_requests pet_requests?  @relation(fields: [request_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  pets         pets?          @relation(fields: [pet_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  owner        users          @relation("message_owner", fields: [owner_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  visitor      users          @relation("message_visitor", fields: [visitor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  sender       users          @relation("message_sender", fields: [sender_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([owner_id, visitor_id, created_at])
+  @@index([request_id, created_at])
+}
+
+enum user_role {
+  admin
+  user
+}
+
+enum verification_status {
+  pending
+  approved
+  rejected
+}
+
+enum pet_status {
+  adoption
+  foster
+}

@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Paws Safe
 
-## Getting Started
+**Connecting pets with loving homes.**
 
-First, run the development server:
+Paws Safe is a peer-to-peer platform for pet rehoming. Owners who can no longer keep a pet list them for **adoption** or temporary **foster** care. People looking to help browse listings, send a request, and connect with the owner only after that request is approved.
+
+It is a **connecting platform**, not a shelter or rescue organization. The goal is to make rehoming safer, simpler, and more accessible—nationwide—with trust built in through verification and owner-controlled contact sharing.
+
+## The idea
+
+Every pet deserves a safe second chance. Whether someone needs to rehome a companion, adopt for life, or foster for a short time, Paws Safe brings those people together in one place—with clear steps, emergency visibility when time is critical, and a process that puts the animal’s welfare first.
+
+**Tone:** warm, practical, and welfare-focused.
+
+## Who it’s for
+
+- **Pet owners** — Get verified, post pets (adoption, foster, or both), flag urgent cases, review requests, and share contact when they approve someone.
+- **Adopters & fosterers** — Browse by country and category, open a pet’s profile, and submit a request.
+- **Admins** — Review identity verification so listings stay trusted.
+- **Supporters** — Contact the team, donate, or use community welfare resources.
+
+## What you can do
+
+1. **Browse** adoption and foster listings (filter by place and type: dogs, cats, rabbits, birds, fish, others).
+2. **Sign up / log in** to request pets or manage your own.
+3. **Get verified** (ID check) before posting.
+4. **Post a pet** with photo, location, health, behavior, and adopt / foster / emergency options.
+5. **Request a pet** through an adoption or foster form.
+6. **Approve or deny** requests as an owner; approved seekers can then connect.
+7. **Reach out** via contact, donations, and community support links.
+
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Open [http://localhost:3000](http://localhost:3000).

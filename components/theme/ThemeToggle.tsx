@@ -15,11 +15,15 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
     <button
       type="button"
       onClick={toggleTheme}
-      className={`theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-full border border-navy/10 bg-surface text-ink transition-colors hover:border-primary hover:text-primary ${className}`}
+      className={`notif-trigger theme-toggle ${className}`.trim()}
       aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
       title={isDark ? "Light mode" : "Dark mode"}
     >
-      {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      {isDark ? (
+        <Sun className="h-[1.15rem] w-[1.15rem]" strokeWidth={2.25} />
+      ) : (
+        <Moon className="h-[1.15rem] w-[1.15rem]" strokeWidth={2.25} />
+      )}
     </button>
   );
 }

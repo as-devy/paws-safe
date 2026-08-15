@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="360" viewBox="0 0 360 360">
+  <defs>
+    <style>
+      .a { fill: none; stroke: #e0b15a; stroke-width: 2.1; stroke-linecap: round; stroke-linejoin: round; opacity: 0.5; }
+      .b { fill: none; stroke: #7ec8c3; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: 0.38; }
+    </style>
+  </defs>
+  <g class="a" transform="translate(30 28)">
+    <ellipse cx="28" cy="40" rx="14" ry="12"/>
+    <circle cx="12" cy="22" r="6"/>
+    <circle cx="24" cy="14" r="6"/>
+    <circle cx="38" cy="14" r="6"/>
+    <circle cx="48" cy="24" r="6"/>
+  </g>
+  <g class="b" transform="translate(160 40)">
+    <rect x="18" y="22" width="40" height="10" rx="5"/>
+    <circle cx="16" cy="18" r="7"/>
+    <circle cx="16" cy="36" r="7"/>
+    <circle cx="60" cy="18" r="7"/>
+    <circle cx="60" cy="36" r="7"/>
+  </g>
+  <g class="a" transform="translate(250 150)">
+    <ellipse cx="28" cy="40" rx="14" ry="12"/>
+    <circle cx="12" cy="22" r="6"/>
+    <circle cx="24" cy="14" r="6"/>
+    <circle cx="38" cy="14" r="6"/>
+    <circle cx="48" cy="24" r="6"/>
+  </g>
+  <g class="b" transform="translate(40 170)">
+    <rect x="18" y="22" width="40" height="10" rx="5"/>
+    <circle cx="16" cy="18" r="7"/>
+    <circle cx="16" cy="36" r="7"/>
+    <circle cx="60" cy="18" r="7"/>
+    <circle cx="60" cy="36" r="7"/>
+  </g>
+  <g class="a" transform="translate(140 250)">
+    <ellipse cx="28" cy="40" rx="14" ry="12"/>
+    <circle cx="12" cy="22" r="6"/>
+    <circle cx="24" cy="14" r="6"/>
+    <circle cx="38" cy="14" r="6"/>
+    <circle cx="48" cy="24" r="6"/>
+  </g>
+  <g class="b" transform="translate(260 260) rotate(18)">
+    <ellipse cx="28" cy="40" rx="14" ry="12"/>
+    <circle cx="12" cy="22" r="6"/>
+    <circle cx="24" cy="14" r="6"/>
+    <circle cx="38" cy="14" r="6"/>
+    <circle cx="48" cy="24" r="6"/>
+  </g>
+</svg>

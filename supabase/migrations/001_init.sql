@@ -4,10 +4,47 @@
 create extension if not exists "pgcrypto";
 
 -- ---------------------------------------------------------------------------
+-- enums
+-- ---------------------------------------------------------------------------
+do $$ begin
+  create type public.verification_status as enum (
+    'pending',
+    'approved',
+    'rejected'
+  );
+exception when duplicate_object then null;
+end $$;
+
+do $$ begin
+  create type public.pet_category as enum (
+    'all',
+    'dogs',
+    'cats',
+    'rabbits',
+    'birds',
+    'fish',
+    'others'
+  );
+exception when duplicate_object then null;
+end $$;
+
+-- ---------------------------------------------------------------------------
+-- helpers
+-- ---------------------------------------------------------------------------
+-- 16 random bytes → base64 text (~22 chars, padding stripped)
+create or replace function public.generate_base64_id(byte_len integer default 16)
+returns text
+language sql
+volatile
+as $$
+  select rtrim(encode(gen_random_bytes(byte_len), 'base64'), '=');
+$$;
+
+-- ---------------------------------------------------------------------------
 -- users
 -- ---------------------------------------------------------------------------
 create table if not exists public.users (
-  id bigint generated always as identity primary key,
+  id text primary key default public.generate_base64_id(),
   username text not null,
   email text not null unique,
   phone text,
@@ -15,8 +52,7 @@ create table if not exists public.users (
   city text,
   password text not null,
   role text not null default 'user' check (role in ('user', 'admin')),
-  verification_status text not null default 'none'
-    check (verification_status in ('none', 'pending', 'approved', 'rejected')),
+  verification_status public.verification_status not null default 'pending',
   created_at timestamptz not null default now()
 );
 
@@ -24,9 +60,9 @@ create table if not exists public.users (
 -- pets
 -- ---------------------------------------------------------------------------
 create table if not exists public.pets (
-  id bigint generated always as identity primary key,
-  owner_id bigint not null references public.users (id) on delete cascade,
-  category text not null,
+  id text primary key default public.generate_base64_id(),
+  owner_id text not null references public.users (id) on delete cascade,
+  category public.pet_category not null,
   img text,
   name text not null,
   age numeric(4, 1),
@@ -50,14 +86,15 @@ create table if not exists public.pets (
 create index if not exists pets_owner_id_idx on public.pets (owner_id);
 create index if not exists pets_rehoming_idx on public.pets (rehoming);
 create index if not exists pets_foster_idx on public.pets (foster);
+create index if not exists pets_category_idx on public.pets (category);
 
 -- ---------------------------------------------------------------------------
 -- pet_requests  (replaces JSON arrays: pets.requests + users.requestedPets)
 -- ---------------------------------------------------------------------------
 create table if not exists public.pet_requests (
   id bigint generated always as identity primary key,
-  pet_id bigint not null references public.pets (id) on delete cascade,
-  requester_id bigint not null references public.users (id) on delete cascade,
+  pet_id text not null references public.pets (id) on delete cascade,
+  requester_id text not null references public.users (id) on delete cascade,
   status text not null default 'pending'
     check (status in ('pending', 'approved', 'rejected', 'withdrawn')),
   foster_duration text,

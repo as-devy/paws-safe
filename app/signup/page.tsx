@@ -13,7 +13,7 @@ export default function SignupPage() {
   return (
     <>
       <Header />
-      <main className="pt-[90px]">
+      <main className="pt-[40px]">
         <AuthShell mode="signup">
           <SignupForm />
         </AuthShell>

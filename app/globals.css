@@ -4,6 +4,8 @@
 @import "./forms.css";
 @import "./auth.css";
 @import "./post-pet.css";
+@import "./header.css";
+@import "./profile.css";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -94,19 +96,134 @@ img,
 video,
 svg {
   max-width: 100%;
+  width: auto;
   height: auto;
 }
 
 .site-header {
-  background: var(--header-bg);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 8px 28px var(--shadow);
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  padding-top: env(safe-area-inset-top);
+  background: color-mix(in oklab, var(--header-bg) 82%, transparent);
+  backdrop-filter: blur(18px) saturate(1.35);
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.site-header--skel {
+  min-height: 4.5rem;
+}
+
+.pet-skel {
+  border-radius: 0.7rem;
+  background: linear-gradient(
+    110deg,
+    var(--cream-deep) 25%,
+    var(--card) 40%,
+    var(--cream-deep) 55%
+  );
+  background-size: 200% 100%;
+  animation: pet-shimmer 1.2s ease-in-out infinite;
+}
+
+.pet-skel--logo {
+  width: 9rem;
+  height: 2.5rem;
+}
+
+.pet-skel--nav {
+  width: 4.5rem;
+  height: 1.75rem;
+}
+
+.pet-skel--icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+}
+
+.pet-skel--title {
+  width: 7rem;
+  height: 2.4rem;
+}
+
+.pet-skel--input {
+  width: 100%;
+  height: 2.7rem;
+}
+
+.pet-skel--line {
+  width: 100%;
+  height: 0.85rem;
+}
+
+.pet-skel--short {
+  width: 55%;
+}
+
+.pet-skel--row {
+  width: 100%;
+  height: 2.75rem;
+}
+
+.pet-skel--toolbar {
+  width: 12rem;
+  height: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.pet-skel--crumb {
+  width: 12rem;
+  height: 0.9rem;
+  margin-bottom: 1.35rem;
+}
+
+.pet-skel--photo {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  max-height: 620px;
+  border-radius: 1.25rem;
+}
+
+.pet-skel--heading {
+  width: 10rem;
+  height: 2.4rem;
+}
+
+.pet-skel--block {
+  width: 100%;
+  height: 6rem;
+  margin-top: 0.5rem;
+}
+
+.pet-skel--cta {
+  width: 10rem;
+  height: 3rem;
+  border-radius: 999px;
+  margin-top: 1rem;
+}
+
+@keyframes pet-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pet-skel {
+    animation: none;
+  }
 }
 
 .theme-toggle {
-  background: var(--surface);
-  color: var(--ink);
-  border-color: var(--card-border);
+  color: var(--heading);
 }
 
 /* Footer */
