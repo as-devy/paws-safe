@@ -120,11 +120,18 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         try {
           const row = await prisma.users.findUnique({
             where: { id: String(token.id) },
-            select: { email_verified: true, role: true },
+            select: {
+              email_verified: true,
+              role: true,
+              phone: true,
+              country: true,
+              city: true,
+            },
           });
           if (row) {
             token.isEmailVerified = Boolean(row.email_verified);
             token.role = row.role === "admin" ? "admin" : "user";
+            token.profileComplete = isProfileComplete(row);
           }
         } catch {
           /* keep previous token value */

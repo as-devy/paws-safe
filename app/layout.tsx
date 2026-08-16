@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
-<<<<<<< HEAD
 import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 import { Nunito, Outfit } from "next/font/google";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import ChatProvider from "@/components/chat/ChatProvider";
-=======
-import { Nunito, Outfit } from "next/font/google";
-import { ThemeProvider } from "@/components/theme/ThemeProvider";
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 import "./globals.css";
 
 const nunito = Nunito({
@@ -32,7 +27,6 @@ export const metadata: Metadata = {
   },
 };
 
-<<<<<<< HEAD
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -54,23 +48,6 @@ export default async function RootLayout({
         <ThemeProvider initialTheme={theme}>
           <ChatProvider>{children}</ChatProvider>
         </ThemeProvider>
-=======
-const themeInitScript = `(function(){try{var t=localStorage.getItem('paws-theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(t!=='light'&&d)){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark'}else{document.documentElement.style.colorScheme='light'}}catch(e){}})();`;
-
-export default function RootLayout({ children }: LayoutProps<"/">) {
-  return (
-    <html
-      lang="en"
-      className={`${nunito.variable} ${outfit.variable} h-full antialiased`}
-      suppressHydrationWarning
-      data-scroll-behavior="smooth"
-    >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
-      <body className="flex min-h-full flex-col">
-        <ThemeProvider>{children}</ThemeProvider>
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
       </body>
     </html>
   );

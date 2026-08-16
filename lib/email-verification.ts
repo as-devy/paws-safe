@@ -3,6 +3,8 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import { createSupabaseAnon, emailRedirectTo } from "@/lib/supabase";
 
+/** Sends a confirmation email via Supabase Auth. Login/session stay on Auth.js. */
+
 export async function sendSignupVerificationEmail(
   email: string,
   password: string,

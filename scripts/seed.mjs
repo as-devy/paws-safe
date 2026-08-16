@@ -42,7 +42,6 @@ const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!url || !serviceKey) {
-<<<<<<< HEAD
   console.error(`
 Missing env for seeding.
 
@@ -56,11 +55,6 @@ service role key (bypasses RLS):
 
 Then: npm run seed
 `);
-=======
-  console.error(
-    "Missing SUPABASE_URL (or NEXT_PUBLIC_SUPABASE_URL) and SUPABASE_SERVICE_ROLE_KEY in .env",
-  );
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   process.exit(1);
 }
 
@@ -80,10 +74,7 @@ const users = [
     password: "Password123!",
     role: "admin",
     verification_status: "approved",
-<<<<<<< HEAD
     email_verified: true,
-=======
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   },
   {
     username: "omar_verified",
@@ -94,10 +85,7 @@ const users = [
     password: "Password123!",
     role: "user",
     verification_status: "approved",
-<<<<<<< HEAD
     email_verified: true,
-=======
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   },
   {
     username: "nada_foster",
@@ -108,10 +96,7 @@ const users = [
     password: "Password123!",
     role: "user",
     verification_status: "approved",
-<<<<<<< HEAD
     email_verified: true,
-=======
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   },
   {
     username: "karim_seeker",
@@ -121,12 +106,8 @@ const users = [
     city: "Cairo",
     password: "Password123!",
     role: "user",
-<<<<<<< HEAD
     verification_status: "pending",
     email_verified: true,
-=======
-    verification_status: "none",
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   },
   {
     username: "lina_seeker",
@@ -137,10 +118,7 @@ const users = [
     password: "Password123!",
     role: "user",
     verification_status: "pending",
-<<<<<<< HEAD
     email_verified: true,
-=======
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   },
   {
     username: "youssef_owner",
@@ -151,10 +129,7 @@ const users = [
     password: "Password123!",
     role: "user",
     verification_status: "approved",
-<<<<<<< HEAD
     email_verified: true,
-=======
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   },
 ];
 
@@ -162,11 +137,7 @@ function petsFor(ids) {
   return [
     {
       owner_id: ids.omar,
-<<<<<<< HEAD
       category: "dogs",
-=======
-      category: "dog",
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
       img: "https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg",
       name: "Luna",
       age: 2,
@@ -188,11 +159,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.omar,
-<<<<<<< HEAD
       category: "cats",
-=======
-      category: "cat",
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
       img: "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg",
       name: "Milo",
       age: 1,
@@ -214,11 +181,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.nada,
-<<<<<<< HEAD
       category: "rabbits",
-=======
-      category: "rabbit",
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
       img: "https://images.pexels.com/photos/4588065/pexels-photo-4588065.jpeg",
       name: "Coco",
       age: 3,
@@ -240,11 +203,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.nada,
-<<<<<<< HEAD
       category: "dogs",
-=======
-      category: "dog",
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
       img: "https://images.pexels.com/photos/1805164/pexels-photo-1805164.jpeg",
       name: "Rex",
       age: 4,
@@ -266,11 +225,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.youssef,
-<<<<<<< HEAD
       category: "birds",
-=======
-      category: "bird",
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
       img: "https://images.pexels.com/photos/1661179/pexels-photo-1661179.jpeg",
       name: "Kiwi",
       age: 1.5,
@@ -292,11 +247,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.youssef,
-<<<<<<< HEAD
       category: "cats",
-=======
-      category: "cat",
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
       img: "https://images.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg",
       name: "Nala",
       age: 2.5,
@@ -340,11 +291,7 @@ function petsFor(ids) {
     },
     {
       owner_id: ids.omar,
-<<<<<<< HEAD
       category: "dogs",
-=======
-      category: "dog",
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
       img: "https://images.pexels.com/photos/2253275/pexels-photo-2253275.jpeg",
       name: "Shadow",
       age: 5,

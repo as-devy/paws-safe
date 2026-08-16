@@ -159,7 +159,6 @@
   color: #fff;
 }
 
-<<<<<<< HEAD
 .auth-stage__journey {
   list-style: none;
   display: none;
@@ -241,52 +240,6 @@
   }
   50% {
     opacity: 1;
-=======
-.auth-stage__pets {
-  display: none;
-  gap: 0.75rem;
-  margin-top: 2rem;
-  align-items: flex-end;
-}
-
-@media (min-width: 960px) {
-  .auth-stage__pets {
-    display: flex;
-  }
-}
-
-.auth-stage__pets img {
-  width: auto;
-  height: 3.25rem;
-  object-fit: contain;
-  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.28));
-  opacity: 0.95;
-  animation: auth-float 4.5s ease-in-out infinite;
-}
-
-.auth-stage__pets img:nth-child(2) {
-  animation-delay: 0.4s;
-  height: 3.5rem;
-}
-
-.auth-stage__pets img:nth-child(3) {
-  animation-delay: 0.8s;
-  height: 3rem;
-}
-
-.auth-stage__pets img:nth-child(4) {
-  animation-delay: 1.2s;
-  height: 2.85rem;
-}
-
-@keyframes auth-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   }
 }
 
@@ -329,11 +282,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .auth-rise,
-<<<<<<< HEAD
   .auth-stage__journey-line {
-=======
-  .auth-stage__pets img {
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     animation: none;
   }
 }
@@ -427,10 +376,7 @@ html.dark .auth-form {
 }
 
 .auth-field input,
-<<<<<<< HEAD
 .auth-field select,
-=======
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 .auth-phone select,
 .auth-password input {
   width: 100%;
@@ -445,10 +391,7 @@ html.dark .auth-form {
 }
 
 .auth-field input:focus,
-<<<<<<< HEAD
 .auth-field select:focus,
-=======
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 .auth-phone select:focus,
 .auth-password input:focus {
   border-color: var(--primary);
@@ -498,7 +441,6 @@ html.dark .auth-form {
   border: 0;
   box-shadow: none;
   background: transparent;
-<<<<<<< HEAD
   color: var(--ink);
   padding: 0.55rem 0.4rem;
   color-scheme: light;
@@ -523,9 +465,6 @@ html.dark .auth-field select {
 html.dark .auth-field select option {
   background: #121820;
   color: #e8edf2;
-=======
-  padding: 0.55rem 0.4rem;
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 }
 
 .auth-phone input {
@@ -534,11 +473,8 @@ html.dark .auth-field select option {
   flex: 1;
   min-width: 0;
   padding: 0.55rem 0.65rem;
-<<<<<<< HEAD
   background: transparent;
   color: var(--ink);
-=======
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 }
 
 .auth-phone:focus-within {
@@ -594,7 +530,6 @@ html.dark .auth-field select option {
   cursor: not-allowed;
 }
 
-<<<<<<< HEAD
 .auth-oauth {
   margin-top: 1rem;
 }
@@ -650,8 +585,6 @@ html.dark .auth-field select option {
   flex-shrink: 0;
 }
 
-=======
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 .auth-switch {
   margin: 1rem 0 0;
   text-align: center;
@@ -659,7 +592,6 @@ html.dark .auth-field select option {
   color: var(--muted);
 }
 
-<<<<<<< HEAD
 .auth-switch a,
 .auth-switch button {
   border: 0;
@@ -695,17 +627,6 @@ html.dark .auth-field select option {
   color: var(--heading);
 }
 
-=======
-.auth-switch a {
-  color: var(--primary);
-  font-weight: 800;
-}
-
-.auth-switch a:hover {
-  text-decoration: underline;
-}
-
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 @media (max-width: 640px) {
   .auth-stage {
     padding: 1.25rem 0 2rem;

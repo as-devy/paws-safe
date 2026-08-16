@@ -23,20 +23,16 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 const STORAGE_KEY = "paws-theme";
 
-<<<<<<< HEAD
 function persistTheme(theme: Theme) {
   localStorage.setItem(STORAGE_KEY, theme);
   document.cookie = `${STORAGE_KEY}=${theme}; path=/; max-age=31536000; SameSite=Lax`;
 }
 
-=======
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 function applyTheme(theme: Theme) {
   document.documentElement.classList.toggle("dark", theme === "dark");
   document.documentElement.style.colorScheme = theme;
 }
 
-<<<<<<< HEAD
 export function ThemeProvider({
   children,
   initialTheme = "light",
@@ -45,16 +41,11 @@ export function ThemeProvider({
   initialTheme?: Theme;
 }) {
   const [theme, setThemeState] = useState<Theme>(initialTheme);
-=======
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("light");
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-<<<<<<< HEAD
     const next: Theme =
       stored === "light" || stored === "dark"
         ? stored
@@ -73,22 +64,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const setTheme = useCallback((next: Theme) => {
     setThemeState(next);
     persistTheme(next);
-=======
-    const initial: Theme =
-      stored === "light" || stored === "dark"
-        ? stored
-        : prefersDark
-          ? "dark"
-          : "light";
-    setThemeState(initial);
-    applyTheme(initial);
-    setMounted(true);
-  }, []);
-
-  const setTheme = useCallback((next: Theme) => {
-    setThemeState(next);
-    localStorage.setItem(STORAGE_KEY, next);
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     applyTheme(next);
   }, []);
 

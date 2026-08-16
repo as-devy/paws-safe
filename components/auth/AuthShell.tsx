@@ -5,11 +5,7 @@ import { HeartHandshake, Home, PawPrint } from "lucide-react";
 
 type AuthShellProps = {
   children: ReactNode;
-<<<<<<< HEAD
   mode: "login" | "signup" | "complete" | "verify";
-=======
-  mode: "login" | "signup";
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 };
 
 const copy = {
@@ -23,7 +19,6 @@ const copy = {
     support:
       "Create your place in the Paws Safe community to adopt, foster, or rehome with trust.",
   },
-<<<<<<< HEAD
   complete: {
     headline: "Finish your profile",
     support:
@@ -34,8 +29,6 @@ const copy = {
     support:
       "We email a verification link so only you can send foster and adoption requests.",
   },
-=======
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 } as const;
 
 const pillars = [
@@ -44,7 +37,6 @@ const pillars = [
   { icon: Home, label: "Rehome" },
 ];
 
-<<<<<<< HEAD
 const journey = {
   login: [
     { step: "01", title: "Pick up", note: "Saved pets & requests" },
@@ -74,13 +66,6 @@ export default function AuthShell({ children, mode }: AuthShellProps) {
 
   return (
     <section className={`auth-stage auth-stage--${mode === "complete" || mode === "verify" ? "signup" : mode}`}>
-=======
-export default function AuthShell({ children, mode }: AuthShellProps) {
-  const { headline, support } = copy[mode];
-
-  return (
-    <section className={`auth-stage auth-stage--${mode}`}>
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
       <div className="auth-stage__glow" aria-hidden />
       <div className="auth-stage__pattern" aria-hidden />
 
@@ -110,7 +95,6 @@ export default function AuthShell({ children, mode }: AuthShellProps) {
             ))}
           </ul>
 
-<<<<<<< HEAD
           <ol className="auth-stage__journey" aria-label="How Paws Safe works">
             {steps.map((item, index) => (
               <li key={item.step} className="auth-stage__journey-item">
@@ -123,14 +107,6 @@ export default function AuthShell({ children, mode }: AuthShellProps) {
               </li>
             ))}
           </ol>
-=======
-          <div className="auth-stage__pets" aria-hidden>
-            <Image src="/imgs/dog.png" alt="" width={56} height={60} />
-            <Image src="/imgs/cat.png" alt="" width={50} height={62} />
-            <Image src="/imgs/rabbit.png" alt="" width={40} height={60} />
-            <Image src="/imgs/bird.png" alt="" width={56} height={50} />
-          </div>
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
         </div>
 
         <div className="auth-stage__panel auth-rise auth-rise--delay">

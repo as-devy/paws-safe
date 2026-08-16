@@ -29,7 +29,6 @@ where email like '%@seed.pawssafe.local';
 -- Passwords are plain demo values for local/dev only — replace with auth later.
 -- ---------------------------------------------------------------------------
 insert into public.users
-<<<<<<< HEAD
   (username, email, phone, country, city, password, role, verification_status, email_verified)
 values
   ('sara_admin', 'sara.admin@seed.pawssafe.local', '+201001111111', 'egypt', 'Cairo', 'Password123!', 'admin', 'approved', true),
@@ -38,16 +37,6 @@ values
   ('karim_seeker', 'karim@seed.pawssafe.local', '+201004444444', 'egypt', 'Cairo', 'Password123!', 'user', 'pending', true),
   ('lina_seeker', 'lina@seed.pawssafe.local', '+447700900123', 'united kingdom', 'London', 'Password123!', 'user', 'pending', true),
   ('youssef_owner', 'youssef@seed.pawssafe.local', '+201005555555', 'egypt', 'Mansoura', 'Password123!', 'user', 'approved', true);
-=======
-  (username, email, phone, country, city, password, role, verification_status)
-values
-  ('sara_admin', 'sara.admin@seed.pawssafe.local', '+201001111111', 'egypt', 'Cairo', 'Password123!', 'admin', 'approved'),
-  ('omar_verified', 'omar@seed.pawssafe.local', '+201002222222', 'egypt', 'Giza', 'Password123!', 'user', 'approved'),
-  ('nada_foster', 'nada@seed.pawssafe.local', '+201003333333', 'egypt', 'Alexandria', 'Password123!', 'user', 'approved'),
-  ('karim_seeker', 'karim@seed.pawssafe.local', '+201004444444', 'egypt', 'Cairo', 'Password123!', 'user', 'none'),
-  ('lina_seeker', 'lina@seed.pawssafe.local', '+447700900123', 'united kingdom', 'London', 'Password123!', 'user', 'pending'),
-  ('youssef_owner', 'youssef@seed.pawssafe.local', '+201005555555', 'egypt', 'Mansoura', 'Password123!', 'user', 'approved');
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 
 -- ---------------------------------------------------------------------------
 -- pets
@@ -56,20 +45,12 @@ insert into public.pets (
   owner_id, category, img, name, age, gender, description,
   country, street_address, city, post_code,
   vaccines_prevention, health_history, diet, behavior,
-<<<<<<< HEAD
   status, emergency, requested
-=======
-  rehoming, foster, emergency, requested
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
 )
 values
   (
     (select id from public.users where email = 'omar@seed.pawssafe.local'),
-<<<<<<< HEAD
     'dogs',
-=======
-    'dog',
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     'https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg',
     'Luna',
     2.0,
@@ -80,19 +61,11 @@ values
     'Spayed. No major surgeries.',
     'Adult dry food twice daily.',
     'Calm, loves walks, mild noise anxiety.',
-<<<<<<< HEAD
     'adoption', true, false
   ),
   (
     (select id from public.users where email = 'omar@seed.pawssafe.local'),
     'cats',
-=======
-    true, false, true, false
-  ),
-  (
-    (select id from public.users where email = 'omar@seed.pawssafe.local'),
-    'cat',
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg',
     'Milo',
     1.0,
@@ -103,19 +76,11 @@ values
     'Recovering from minor injury; needs calm space for 4–6 weeks.',
     'Wet food + dry kibble.',
     'Friendly, curious, no aggression.',
-<<<<<<< HEAD
     'foster', true, false
   ),
   (
     (select id from public.users where email = 'nada@seed.pawssafe.local'),
     'rabbits',
-=======
-    false, true, true, false
-  ),
-  (
-    (select id from public.users where email = 'nada@seed.pawssafe.local'),
-    'rabbit',
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     'https://images.pexels.com/photos/4588065/pexels-photo-4588065.jpeg',
     'Coco',
     3.0,
@@ -126,19 +91,11 @@ values
     'Healthy. Neutered.',
     'Hay, leafy greens, pellets.',
     'Gentle and social.',
-<<<<<<< HEAD
     'adoption', false, false
   ),
   (
     (select id from public.users where email = 'nada@seed.pawssafe.local'),
     'dogs',
-=======
-    true, false, false, false
-  ),
-  (
-    (select id from public.users where email = 'nada@seed.pawssafe.local'),
-    'dog',
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     'https://images.pexels.com/photos/1805164/pexels-photo-1805164.jpeg',
     'Rex',
     4.0,
@@ -149,19 +106,11 @@ values
     'Healthy. Neutered.',
     'Mixed dry food.',
     'Protective but trainable; best as only dog.',
-<<<<<<< HEAD
     'foster', false, false
   ),
   (
     (select id from public.users where email = 'youssef@seed.pawssafe.local'),
     'birds',
-=======
-    false, true, false, false
-  ),
-  (
-    (select id from public.users where email = 'youssef@seed.pawssafe.local'),
-    'bird',
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     'https://images.pexels.com/photos/1661179/pexels-photo-1661179.jpeg',
     'Kiwi',
     1.5,
@@ -172,38 +121,22 @@ values
     'No known issues.',
     'Seeds + fresh greens.',
     'Vocal and affectionate.',
-<<<<<<< HEAD
     'adoption', false, false
   ),
   (
     (select id from public.users where email = 'youssef@seed.pawssafe.local'),
     'cats',
-=======
-    true, false, false, false
-  ),
-  (
-    (select id from public.users where email = 'youssef@seed.pawssafe.local'),
-    'cat',
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     'https://images.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg',
     'Nala',
     2.5,
     'female',
-<<<<<<< HEAD
     'Sweet cat available for adoption. Bonds quickly with calm households.',
-=======
-    'Sweet cat available for foster or adoption. Bonds quickly with calm households.',
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     'egypt', '22 University St', 'Mansoura', '35516',
     'Vaccinated and flea treated.',
     'Spayed. Healthy.',
     'Grain-free dry food.',
     'Loves laps; shy at first.',
-<<<<<<< HEAD
     'adoption', false, false
-=======
-    true, true, false, false
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   ),
   (
     (select id from public.users where email = 'sara.admin@seed.pawssafe.local'),
@@ -218,19 +151,11 @@ values
     'Healthy.',
     'Flake food.',
     'Peaceful.',
-<<<<<<< HEAD
     'adoption', false, false
   ),
   (
     (select id from public.users where email = 'omar@seed.pawssafe.local'),
     'dogs',
-=======
-    true, false, false, false
-  ),
-  (
-    (select id from public.users where email = 'omar@seed.pawssafe.local'),
-    'dog',
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
     'https://images.pexels.com/photos/2253275/pexels-photo-2253275.jpeg',
     'Shadow',
     5.0,
@@ -241,11 +166,7 @@ values
     'Mild arthritis; managed with diet.',
     'Senior formula.',
     'Very gentle with people.',
-<<<<<<< HEAD
     'adoption', true, false
-=======
-    true, false, true, false
->>>>>>> 9fbe6272ae14926655cd6155816221b0eb2ae799
   );
 
 -- ---------------------------------------------------------------------------
