@@ -24,6 +24,8 @@ export type Pet = {
   behavior?: string | null;
   ownerId?: string | number;
   owner_id?: string | number;
+  /** Display name for the listing owner (username or email local-part). */
+  ownerName?: string | null;
   streetAddress?: string | null;
   street_address?: string | null;
   postCode?: string | null;

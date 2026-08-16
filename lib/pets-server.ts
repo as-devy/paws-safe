@@ -18,6 +18,16 @@ const STATUS_BY_MODE = {
   foster: pet_status.foster,
 } as const;
 
+const petOwnerSelect = {
+  username: true,
+  email: true,
+} as const;
+
+const petListInclude = {
+  _count: { select: { pet_requests: true } },
+  users: { select: petOwnerSelect },
+} as const;
+
 type PetWithCount = {
   id: string;
   name: string;
@@ -39,7 +49,18 @@ type PetWithCount = {
   street_address: string | null;
   post_code: string | null;
   _count: { pet_requests: number };
+  users?: {
+    username: string | null;
+    email: string | null;
+  } | null;
 };
+
+function ownerDisplayName(
+  owner?: { username: string | null; email: string | null } | null,
+) {
+  if (!owner) return null;
+  return owner.username?.trim() || owner.email?.split("@")[0] || "Member";
+}
 
 function toAge(age: PetWithCount["age"]): string | number {
   if (age == null) return "";
@@ -67,6 +88,7 @@ export function mapPetRow(row: PetWithCount): Pet {
     diet: row.diet,
     behavior: row.behavior,
     owner_id: row.owner_id,
+    ownerName: ownerDisplayName(row.users),
     street_address: row.street_address,
     post_code: row.post_code,
     request_count: row._count.pet_requests,
@@ -76,9 +98,7 @@ export function mapPetRow(row: PetWithCount): Pet {
 export const fetchPetById = cache(async (id: string): Promise<Pet | null> => {
   const row = await prisma.pets.findUnique({
     where: { id },
-    include: {
-      _count: { select: { pet_requests: true } },
-    },
+    include: petListInclude,
   });
 
   if (!row) return null;
@@ -89,9 +109,7 @@ export async function fetchPetsForListing(mode: ListingMode): Promise<Pet[]> {
   const rows = await prisma.pets.findMany({
     where: { status: STATUS_BY_MODE[mode] },
     orderBy: { created_at: "desc" },
-    include: {
-      _count: { select: { pet_requests: true } },
-    },
+    include: petListInclude,
   });
 
   return rows.map(mapPetRow);
@@ -111,9 +129,7 @@ export async function fetchEmergencyPets(limit = 3): Promise<Pet[]> {
       where: { emergency: true },
       orderBy: { created_at: "desc" },
       take: limit,
-      include: {
-        _count: { select: { pet_requests: true } },
-      },
+      include: petListInclude,
     });
 
     return rows.map(mapPetRow);
@@ -226,6 +242,7 @@ export async function fetchPetsByOwner(ownerId: string): Promise<Pet[]> {
       _count: {
         select: { pet_requests: { where: { status: "pending" } } },
       },
+      users: { select: petOwnerSelect },
     },
   });
 
@@ -344,9 +361,7 @@ export async function createPet(
         behavior: optionalText(data.behavior),
         emergency: Boolean(data.emergency),
       },
-      include: {
-        _count: { select: { pet_requests: true } },
-      },
+      include: petListInclude,
     });
 
     return { pet: mapPetRow(row), message: null };
@@ -466,9 +481,7 @@ export async function updateOwnedPet(
         behavior: optionalText(data.behavior),
         emergency: Boolean(data.emergency),
       },
-      include: {
-        _count: { select: { pet_requests: true } },
-      },
+      include: petListInclude,
     });
 
     return { pet: mapPetRow(row), message: null };

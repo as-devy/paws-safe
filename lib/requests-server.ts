@@ -156,6 +156,7 @@ export async function fetchOutgoingRequests(
       pets: {
         include: {
           _count: { select: { pet_requests: true } },
+          users: { select: { username: true, email: true } },
         },
       },
     },

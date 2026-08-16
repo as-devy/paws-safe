@@ -13,12 +13,31 @@ type PetCardProps = {
   pet: Pet;
 };
 
+function titleCase(value: string) {
+  return value
+    .trim()
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
+function ownerInitials(name: string) {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  }
+  return name.slice(0, 2).toUpperCase() || "PS";
+}
+
 export default function PetCard({ pet }: PetCardProps) {
   const requestCount = getRequestCount(pet);
   const statusLabel = petModeLabel(pet);
   const category = normalizeCategory(pet.category);
   const ageLabel =
     pet.age === "" || pet.age == null ? "Age unknown" : `${pet.age} yrs`;
+  const ownerName = pet.ownerName?.trim()
+    ? titleCase(pet.ownerName)
+    : null;
 
   return (
     <Link href={petDetailHref(pet)} className="pet-card">
@@ -69,10 +88,25 @@ export default function PetCard({ pet }: PetCardProps) {
           <p className="pet-card__desc">{pet.description}</p>
         ) : null}
 
-        <span className="pet-card__cta">
-          View profile
-          <ArrowUpRight className="h-4 w-4" aria-hidden />
-        </span>
+        <div className="pet-card__foot">
+          {ownerName ? (
+            <span className="pet-card__owner" title={`Listed by ${ownerName}`}>
+              <span className="pet-card__owner-avatar" aria-hidden>
+                {ownerInitials(ownerName)}
+              </span>
+              <span className="pet-card__owner-text">
+                <em>Listed by</em>
+                <strong>{ownerName}</strong>
+              </span>
+            </span>
+          ) : (
+            <span />
+          )}
+          <span className="pet-card__cta">
+            View profile
+            <ArrowUpRight className="h-4 w-4" aria-hidden />
+          </span>
+        </div>
       </div>
     </Link>
   );
