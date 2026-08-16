@@ -391,8 +391,10 @@ function UsersTable({
                     <span>
                       <strong>{titleCase(user.name)}</strong>
                       <small>
-                        {[user.city, user.country].filter(Boolean).map(titleCase).join(", ") ||
-                          "No location"}
+                        {[user.city, user.country]
+                          .filter((part): part is string => Boolean(part))
+                          .map(titleCase)
+                          .join(", ") || "No location"}
                       </small>
                     </span>
                   </Link>
