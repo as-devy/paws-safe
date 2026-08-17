@@ -22,9 +22,6 @@ export const metadata: Metadata = {
   title: "Paws Safe | Connecting Pets with Loving Homes",
   description:
     "Adopt, foster, or rehome pets safely. Paws Safe makes pet rehoming, adoption, and fostering simple and trusted.",
-  icons: {
-    icon: "/favicon.ico",
-  },
 };
 
 export default async function RootLayout({
