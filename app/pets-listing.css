@@ -223,7 +223,13 @@
 }
 
 .pet-filter__select.site-select__trigger {
+  display: flex;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 2.9rem;
   justify-content: space-between;
+  padding: 0.75rem 0.85rem;
+  text-transform: capitalize;
 }
 
 .pet-filter__select:hover,
