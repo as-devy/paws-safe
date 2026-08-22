@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { FormEvent, useState, type CSSProperties } from "react";
-import { PawPrint, Search } from "lucide-react";
+import { Globe2, HeartHandshake, PawPrint, Search } from "lucide-react";
 import { CATEGORY_FILTERS } from "@/lib/pets";
 import CategoryIcon from "@/components/pets/CategoryIcon";
 
@@ -70,59 +70,72 @@ export default function Hero() {
             Need to rehome? Post your pet. Looking to help? Adopt or foster.
           </p>
 
-          <form onSubmit={onSearch} className="search-panel">
-            <label className="sr-only" htmlFor="countrySelection">
-              Country
-            </label>
-            <select
-              id="countrySelection"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              className="hero-select"
-            >
-              <option value="all">All Countries</option>
-              <option value="egypt">Egypt</option>
-              <option value="usa">USA</option>
-              <option value="uk">UK</option>
-            </select>
+          <form onSubmit={onSearch} className="search-panel" role="search">
+            <div className="search-panel__field">
+              <Globe2 className="search-panel__icon" aria-hidden />
+              <label className="sr-only" htmlFor="countrySelection">
+                Country
+              </label>
+              <select
+                id="countrySelection"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                className="hero-select"
+              >
+                <option value="all">All Countries</option>
+                <option value="egypt">Egypt</option>
+                <option value="usa">USA</option>
+                <option value="uk">UK</option>
+              </select>
+            </div>
 
-            <label className="sr-only" htmlFor="categorySelection">
-              Pet category
-            </label>
-            <select
-              id="categorySelection"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="hero-select sm:max-w-[150px]"
-            >
-              <option value="dog">Dog</option>
-              <option value="cat">Cat</option>
-              <option value="rabbit">Rabbit</option>
-              <option value="bird">Bird</option>
-              <option value="fish">Fish</option>
-              <option value="other">Other</option>
-            </select>
+            <span className="search-panel__divider" aria-hidden />
 
-            <label className="sr-only" htmlFor="type_selection">
-              Type
-            </label>
-            <select
-              id="type_selection"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              className="hero-select sm:max-w-[140px]"
-            >
-              <option value="adopt">Adopt</option>
-              <option value="foster">Foster</option>
-            </select>
+            <div className="search-panel__field">
+              <PawPrint className="search-panel__icon" aria-hidden />
+              <label className="sr-only" htmlFor="categorySelection">
+                Pet category
+              </label>
+              <select
+                id="categorySelection"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="hero-select"
+              >
+                <option value="dog">Dog</option>
+                <option value="cat">Cat</option>
+                <option value="rabbit">Rabbit</option>
+                <option value="bird">Bird</option>
+                <option value="fish">Fish</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <span className="search-panel__divider" aria-hidden />
+
+            <div className="search-panel__field">
+              <HeartHandshake className="search-panel__icon" aria-hidden />
+              <label className="sr-only" htmlFor="type_selection">
+                Type
+              </label>
+              <select
+                id="type_selection"
+                value={type}
+                onChange={(e) => setType(e.target.value)}
+                className="hero-select"
+              >
+                <option value="adopt">Adopt</option>
+                <option value="foster">Foster</option>
+              </select>
+            </div>
 
             <button
               type="submit"
               className="hero-search-btn"
               aria-label="Search pets"
             >
-              <Search className="h-4 w-4" />
-              <span className="sm:hidden">Search</span>
+              <Search className="h-4 w-4" strokeWidth={2.5} />
+              <span className="hero-search-btn__label">Search</span>
             </button>
           </form>
         </div>
@@ -130,7 +143,8 @@ export default function Hero() {
 
       <div className="hero-rail">
         <nav className="category-rail" aria-label="Browse by pet type">
-          <p className="category-rail__label">Quick browse</p>
+          <div className="category-rail__head">
+            <p className="category-rail__label">Quick browse</p>          </div>
           <ul className="category-rail__list">
             {heroCategories.map((cat) => {
               const active = category === cat.key;
@@ -149,7 +163,7 @@ export default function Hero() {
                     <span className="category-chip__icon" aria-hidden>
                       <CategoryIcon
                         category={cat.key}
-                        className="h-[1.15rem] w-[1.15rem]"
+                        className="h-[1.2rem] w-[1.2rem]"
                       />
                     </span>
                     <span className="category-chip__text">{cat.label}</span>
