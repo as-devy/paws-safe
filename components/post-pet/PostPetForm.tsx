@@ -15,6 +15,7 @@ import {
   Stethoscope,
 } from "lucide-react";
 import { COUNTRIES } from "@/lib/countries";
+import { SelectField, SelectItem } from "@/components/ui/SelectField";
 import { postPet, updatePet, type CreatePetState } from "@/lib/actions";
 import { CATEGORY_FILTERS, normalizeCategory, type Pet } from "@/lib/pets";
 import CategoryIcon from "@/components/pets/CategoryIcon";
@@ -462,18 +463,18 @@ export default function PostPetForm({
                 <label className="post-label" htmlFor="countrySelection">
                   Country
                 </label>
-                <select
+                <SelectField
                   id="countrySelection"
                   className="post-input"
                   value={form.country}
-                  onChange={(e) => update("country", e.target.value)}
+                  onValueChange={(value) => update("country", value)}
                 >
                   {COUNTRIES.map((country) => (
-                    <option key={country} value={country.toLowerCase()}>
+                    <SelectItem key={country} value={country.toLowerCase()}>
                       {country}
-                    </option>
+                    </SelectItem>
                   ))}
-                </select>
+                </SelectField>
                 <FieldErrors messages={errors?.country} />
 
                 <label className="post-label" htmlFor="streetAddress">

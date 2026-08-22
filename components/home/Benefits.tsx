@@ -80,7 +80,7 @@ export default function Benefits() {
             <div className="benefits__orb" aria-hidden />
             <div className="benefits__ring" aria-hidden />
             <Image
-              src="/imgs/benefits-natural.png"
+              src="/imgs/benefits-natural.jpg"
               alt="A collie and a cat sitting together at home"
               width={640}
               height={640}

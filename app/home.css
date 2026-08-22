@@ -1633,6 +1633,7 @@ html.dark .home-contact__panel {
 
 .home-contact__field input,
 .home-contact__field select,
+.home-contact__field .site-select__trigger,
 .home-contact__field textarea {
   width: 100%;
   border: 1.5px solid var(--card-border);
@@ -1661,6 +1662,10 @@ html.dark .home-contact__panel {
   background-repeat: no-repeat;
 }
 
+.home-contact__field .site-select__trigger {
+  justify-content: space-between;
+}
+
 .home-contact__field textarea {
   resize: none;
   min-height: 8rem;
@@ -1668,6 +1673,7 @@ html.dark .home-contact__panel {
 
 .home-contact__field input:focus,
 .home-contact__field select:focus,
+.home-contact__field .site-select__trigger:focus,
 .home-contact__field textarea:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--primary) 18%, transparent);

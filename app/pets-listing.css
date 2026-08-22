@@ -222,8 +222,14 @@
     box-shadow 0.2s ease;
 }
 
+.pet-filter__select.site-select__trigger {
+  justify-content: space-between;
+}
+
 .pet-filter__select:hover,
-.pet-filter__select:focus {
+.pet-filter__select:focus,
+.pet-filter__select.site-select__trigger:hover,
+.pet-filter__select.site-select__trigger:focus {
   border-color: color-mix(in oklab, var(--primary) 45%, var(--card-border));
   box-shadow: 0 0 0 3px color-mix(in oklab, var(--primary) 14%, transparent);
 }

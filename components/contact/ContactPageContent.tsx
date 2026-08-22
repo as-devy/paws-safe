@@ -14,6 +14,7 @@ import {
   UserRound,
 } from "lucide-react";
 import SiteToast from "@/components/ui/SiteToast";
+import { SelectField, SelectItem } from "@/components/ui/SelectField";
 
 const channels = [
   {
@@ -139,17 +140,17 @@ export default function ContactPageContent() {
             <Tag className="h-3.5 w-3.5" />
             Topic
           </span>
-          <select
+            <SelectField
             id="page_contact_topic"
             name="topic"
             defaultValue="general"
           >
-            <option value="general">General question</option>
-            <option value="adoption">Adoption help</option>
-            <option value="foster">Foster help</option>
-            <option value="posting">Posting a pet</option>
-            <option value="donation">Donation</option>
-          </select>
+              <SelectItem value="general">General question</SelectItem>
+              <SelectItem value="adoption">Adoption help</SelectItem>
+              <SelectItem value="foster">Foster help</SelectItem>
+              <SelectItem value="posting">Posting a pet</SelectItem>
+              <SelectItem value="donation">Donation</SelectItem>
+            </SelectField>
         </label>
 
         <label className="home-contact__field" htmlFor="page_contact_message">

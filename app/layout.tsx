@@ -41,7 +41,7 @@ export default async function RootLayout({
       suppressHydrationWarning
       data-scroll-behavior="smooth"
     >
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col" style={{margin: '0 !important'}}>
         <ThemeProvider initialTheme={theme}>
           <ChatProvider>{children}</ChatProvider>
         </ThemeProvider>

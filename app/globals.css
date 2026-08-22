@@ -79,6 +79,108 @@ body {
   font-family: var(--font-nunito), system-ui, sans-serif;
   overflow-x: hidden;
   transition: background-color 0.25s ease, color 0.25s ease;
+  
+}
+
+/* Keep the document scrollable while a Radix select menu is open. */
+body[data-scroll-locked] {
+  overflow-y: auto !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+.site-select__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.site-select__trigger:focus-visible {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 25%, transparent) !important;
+}
+
+.site-select__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.site-select__icon svg,
+.site-select__scroll-button svg,
+.site-select__item-indicator svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.site-select__content {
+  z-index: 100;
+  min-width: var(--radix-select-trigger-width);
+  max-height: var(--radix-select-content-available-height);
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  border-radius: 0.85rem;
+  background: var(--card);
+  box-shadow: 0 16px 34px var(--shadow);
+  animation: site-select-in 0.16s ease-out;
+}
+
+.site-select__viewport {
+  padding: 0.35rem;
+}
+
+.site-select__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 2.5rem;
+  padding: 0.55rem 2rem 0.55rem 0.75rem;
+  border-radius: 0.55rem;
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+}
+
+.site-select__item[data-highlighted] {
+  background: var(--primary-soft);
+  color: var(--heading);
+}
+
+.site-select__item[data-disabled] {
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.site-select__item-indicator {
+  position: absolute;
+  right: 0.65rem;
+  display: inline-flex;
+}
+
+.site-select__scroll-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 1.5rem;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: default;
+}
+
+@keyframes site-select-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 html.dark body {

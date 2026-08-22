@@ -5,6 +5,7 @@ import { FormEvent, useState, type CSSProperties } from "react";
 import { Globe2, HeartHandshake, PawPrint, Search } from "lucide-react";
 import { CATEGORY_FILTERS } from "@/lib/pets";
 import CategoryIcon from "@/components/pets/CategoryIcon";
+import { SelectField, SelectItem } from "@/components/ui/SelectField";
 
 const heroCategories = CATEGORY_FILTERS.filter((c) => c.key !== "all");
 
@@ -76,17 +77,17 @@ export default function Hero() {
               <label className="sr-only" htmlFor="countrySelection">
                 Country
               </label>
-              <select
+              <SelectField
                 id="countrySelection"
                 value={country}
-                onChange={(e) => setCountry(e.target.value)}
+                onValueChange={setCountry}
                 className="hero-select"
               >
-                <option value="all">All Countries</option>
-                <option value="egypt">Egypt</option>
-                <option value="usa">USA</option>
-                <option value="uk">UK</option>
-              </select>
+                <SelectItem value="all">All Countries</SelectItem>
+                <SelectItem value="egypt">Egypt</SelectItem>
+                <SelectItem value="usa">USA</SelectItem>
+                <SelectItem value="uk">UK</SelectItem>
+              </SelectField>
             </div>
 
             <span className="search-panel__divider" aria-hidden />
@@ -96,19 +97,19 @@ export default function Hero() {
               <label className="sr-only" htmlFor="categorySelection">
                 Pet category
               </label>
-              <select
+              <SelectField
                 id="categorySelection"
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onValueChange={setCategory}
                 className="hero-select"
               >
-                <option value="dog">Dog</option>
-                <option value="cat">Cat</option>
-                <option value="rabbit">Rabbit</option>
-                <option value="bird">Bird</option>
-                <option value="fish">Fish</option>
-                <option value="other">Other</option>
-              </select>
+                <SelectItem value="dog">Dog</SelectItem>
+                <SelectItem value="cat">Cat</SelectItem>
+                <SelectItem value="rabbit">Rabbit</SelectItem>
+                <SelectItem value="bird">Bird</SelectItem>
+                <SelectItem value="fish">Fish</SelectItem>
+                <SelectItem value="other">Other</SelectItem>
+              </SelectField>
             </div>
 
             <span className="search-panel__divider" aria-hidden />
@@ -118,15 +119,15 @@ export default function Hero() {
               <label className="sr-only" htmlFor="type_selection">
                 Type
               </label>
-              <select
+              <SelectField
                 id="type_selection"
                 value={type}
-                onChange={(e) => setType(e.target.value)}
+                onValueChange={setType}
                 className="hero-select"
               >
-                <option value="adopt">Adopt</option>
-                <option value="foster">Foster</option>
-              </select>
+                <SelectItem value="adopt">Adopt</SelectItem>
+                <SelectItem value="foster">Foster</SelectItem>
+              </SelectField>
             </div>
 
             <button
@@ -144,7 +145,8 @@ export default function Hero() {
       <div className="hero-rail">
         <nav className="category-rail" aria-label="Browse by pet type">
           <div className="category-rail__head">
-            <p className="category-rail__label">Quick browse</p>          </div>
+            <p className="category-rail__label">Quick browse</p>          
+          </div>
           <ul className="category-rail__list">
             {heroCategories.map((cat) => {
               const active = category === cat.key;

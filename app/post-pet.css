@@ -215,7 +215,8 @@ html.dark .post-wizard {
   font-weight: 700;
 }
 
-.post-input {
+.post-input,
+.site-select__trigger.post-input {
   width: 100%;
   border: 1.5px solid var(--card-border);
   border-radius: 0.9rem;

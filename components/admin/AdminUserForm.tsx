@@ -5,6 +5,7 @@ import Link from "next/link";
 import { COUNTRIES } from "@/lib/countries";
 import { adminUpdateUser, type AdminUpdateUserState } from "@/lib/actions";
 import type { AdminUserRecord } from "@/lib/admin-server";
+import { SelectField, SelectItem } from "@/components/ui/SelectField";
 
 const initialState: AdminUpdateUserState = { message: null };
 
@@ -44,22 +45,22 @@ export default function AdminUserForm({ user }: { user: AdminUserRecord }) {
 
         <label className="admin-field">
           <span>Country</span>
-          <select name="country" defaultValue={user.country}>
-            <option value="">Country</option>
+          <SelectField name="country" defaultValue={user.country} placeholder="Country">
+            <SelectItem value="">Country</SelectItem>
             {COUNTRIES.map((country) => (
-              <option key={country} value={country}>
+              <SelectItem key={country} value={country}>
                 {country}
-              </option>
+              </SelectItem>
             ))}
-          </select>
+          </SelectField>
         </label>
 
         <label className="admin-field">
           <span>Role</span>
-          <select name="role" defaultValue={user.role}>
-            <option value="user">User</option>
-            <option value="admin">Admin</option>
-          </select>
+          <SelectField name="role" defaultValue={user.role}>
+            <SelectItem value="user">User</SelectItem>
+            <SelectItem value="admin">Admin</SelectItem>
+          </SelectField>
         </label>
       </div>
 

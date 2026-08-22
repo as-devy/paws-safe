@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { useSearchParams } from "next/navigation";
-import { ChevronDown, Globe, PawPrint, RotateCcw, SlidersHorizontal } from "lucide-react";
+import { Globe, PawPrint, RotateCcw, SlidersHorizontal } from "lucide-react";
 import ListingBanner from "@/components/pets/ListingBanner";
 import PetCard from "@/components/pets/PetCard";
 import CategoryIcon from "@/components/pets/CategoryIcon";
+import { SelectField, SelectItem } from "@/components/ui/SelectField";
 import {
   CATEGORY_FILTERS,
   countCategories,
@@ -111,26 +112,22 @@ export default function PetListing({
                   Location
                 </label>
                 <div className="pet-filter__select-wrap">
-                  <select
+                  <SelectField
                     id="countryFilter"
                     className="pet-filter__select"
                     value={country}
-                    onChange={(e) => {
-                      setCountry(e.target.value);
+                    onValueChange={(value) => {
+                      setCountry(value);
                       setCategory("all");
                     }}
                   >
-                    <option value="all">All countries</option>
+                    <SelectItem value="all">All countries</SelectItem>
                     {countries.map((c) => (
-                      <option key={c} value={countrySlug(c)}>
+                      <SelectItem key={c} value={countrySlug(c)}>
                         {c}
-                      </option>
+                      </SelectItem>
                     ))}
-                  </select>
-                  <ChevronDown
-                    className="pet-filter__select-caret"
-                    aria-hidden
-                  />
+                  </SelectField>
                 </div>
               </div>
 

@@ -450,7 +450,8 @@
 }
 
 .admin-field input,
-.admin-field select {
+.admin-field select,
+.admin-field .site-select__trigger {
   width: 100%;
   min-height: 2.6rem;
   padding: 0.55rem 0.75rem;

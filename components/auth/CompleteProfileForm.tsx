@@ -7,6 +7,7 @@ import {
   completeProfile,
   type CompleteProfileState,
 } from "@/lib/actions";
+import { SelectField, SelectItem } from "@/components/ui/SelectField";
 
 const countryCodes = [
   { value: "+20", label: "+20 🇪🇬" },
@@ -46,17 +47,17 @@ export default function CompleteProfileForm() {
           Phone <b>*</b>
         </label>
         <div className="auth-phone">
-          <select
+          <SelectField
             aria-label="Country code"
             name="countryCode"
             defaultValue={state.values?.countryCode ?? "+20"}
           >
             {countryCodes.map((code) => (
-              <option key={code.value} value={code.value}>
+              <SelectItem key={code.value} value={code.value}>
                 {code.label}
-              </option>
+              </SelectItem>
             ))}
-          </select>
+          </SelectField>
           <input
             id="complete-phone"
             name="phone"
@@ -85,22 +86,21 @@ export default function CompleteProfileForm() {
         </label>
         <div className="auth-location">
           <div>
-            <select
+            <SelectField
               id="complete-country"
               name="country"
               aria-label="Country"
               aria-describedby="country-error"
               defaultValue={state.values?.country ?? ""}
+              placeholder="Country"
             >
-              <option value="" disabled>
-                Country
-              </option>
+              <SelectItem value="" disabled>Country</SelectItem>
               {COUNTRIES.map((country) => (
-                <option key={country} value={country}>
+                <SelectItem key={country} value={country}>
                   {country}
-                </option>
+                </SelectItem>
               ))}
-            </select>
+            </SelectField>
             <div id="country-error" aria-live="polite" aria-atomic="true">
               {state.errors?.country?.map((error) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>

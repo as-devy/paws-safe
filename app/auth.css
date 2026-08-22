@@ -377,7 +377,9 @@ html.dark .auth-form {
 
 .auth-field input,
 .auth-field select,
+.auth-field .site-select__trigger,
 .auth-phone select,
+.auth-phone .site-select__trigger,
 .auth-password input {
   width: 100%;
   border: 1.5px solid var(--card-border);
@@ -392,7 +394,9 @@ html.dark .auth-form {
 
 .auth-field input:focus,
 .auth-field select:focus,
+.auth-field .site-select__trigger:focus,
 .auth-phone select:focus,
+.auth-phone .site-select__trigger:focus,
 .auth-password input:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(2, 197, 189, 0.18);
@@ -446,8 +450,24 @@ html.dark .auth-form {
   color-scheme: light;
 }
 
+.auth-phone .site-select__trigger {
+  width: auto;
+  max-width: 7.5rem;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  color: var(--ink);
+  padding: 0.55rem 0.4rem;
+}
+
 html.dark .auth-phone select {
   color-scheme: dark;
+  background: #121820;
+  color: #e8edf2;
+  border-radius: 0.65rem;
+}
+
+html.dark .auth-phone .site-select__trigger {
   background: #121820;
   color: #e8edf2;
   border-radius: 0.65rem;
@@ -459,6 +479,10 @@ html.dark .auth-phone select option {
 }
 
 html.dark .auth-field select {
+  color-scheme: dark;
+}
+
+html.dark .auth-field .site-select__trigger {
   color-scheme: dark;
 }
 
